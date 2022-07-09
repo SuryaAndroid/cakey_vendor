@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           prefs.setBool("currentUser" , true);
           prefs.setString("authToken" , map["token"]);
-          prefs.setString("authToken" , map["token"]);
+          prefs.setString("authMail" , email.text);
 
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomeScreen()));
 
