@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
           prefs.setString("authToken" , map["token"]);
           prefs.setString("authToken" , map["token"]);
 
-          Navigator.push(context, MaterialPageRoute(builder:(context)=>HomeScreen()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomeScreen()));
 
         }else{
           checkNetwork();
