@@ -1,18 +1,19 @@
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
+import 'package:cakey_vendor/Drawer/AddCakes.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CakeDetails extends StatefulWidget {
-  var flavours , shapes ;
-  CakeDetails({required this.flavours, required this.shapes});
+  var flavours , shapes ,tiers;
+  CakeDetails({required this.flavours, required this.shapes,required this.tiers});
 
   @override
-  State<CakeDetails> createState() => _CakeDetailsState(flavours: flavours , shapes: shapes);
+  State<CakeDetails> createState() => _CakeDetailsState(flavours: flavours , shapes: shapes , tiers: tiers);
 }
 
 class _CakeDetailsState extends State<CakeDetails> {
-  var flavours , shapes ;
-  _CakeDetailsState({required this.flavours, required this.shapes});
+  var flavours , shapes , tiers;
+  _CakeDetailsState({required this.flavours, required this.shapes ,required this.tiers });
 
   AlertsAndColors alertsAndColors = new AlertsAndColors();
 
@@ -270,7 +271,10 @@ class _CakeDetailsState extends State<CakeDetails> {
                                 padding:EdgeInsets.only(right: 8, top: 5),
                                 child: RaisedButton(
                                   onPressed: (){
-
+                                    Navigator.push(
+                                        context, 
+                                        MaterialPageRoute(builder: (context)=>AddCakes())
+                                    );
                                   },
                                   child: Text("EDIT" ,style: TextStyle(
                                       color: Colors.orange,
@@ -370,6 +374,7 @@ class _CakeDetailsState extends State<CakeDetails> {
                       fontFamily: "Poppins"
                   ),),
                   SizedBox(height: 15,),
+
                   //ui flavours
                   Text("FLAVOURS" , style: TextStyle(
                       color: alertsAndColors.darkBlue,
@@ -454,6 +459,7 @@ class _CakeDetailsState extends State<CakeDetails> {
                       );
                     },
                   ),
+                  SizedBox(height: 15,),
 
                   //ui weight
                   Text("WEIGHT" , style: TextStyle(
@@ -496,6 +502,65 @@ class _CakeDetailsState extends State<CakeDetails> {
                       );
                     },
                   ),
+                  SizedBox(height: 15,),
+
+                  //ui toppers
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("TIERS" , style: TextStyle(
+                          color: alertsAndColors.darkBlue,
+                          fontSize:15,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.bold
+                      ),),
+                      SizedBox(height: 6,),
+                      Divider(
+                        height: 1,
+                        color: Colors.grey[400],
+                      ),
+                      tiers.isNotEmpty?
+                      ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: tiers.length,
+                        itemBuilder: (context , i){
+                          return Container(
+                              padding: EdgeInsets.all(4),
+                              child: Text.rich(
+                                  TextSpan(
+                                      text: "${tiers[i]["Tier"]} - ",
+                                      style: TextStyle(
+                                          color: Colors.grey[400],
+                                          fontFamily: "Poppins"
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: "Rs ${tiers[i]['Price']}/${tiers[i]['Weight']}",
+                                          style: TextStyle(
+                                              color: alertsAndColors.darkBlue,
+                                              fontFamily: "Poppins",
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        )
+                                      ]
+                                  )
+                              )
+                          );
+                        },
+                      ):
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text("No Tiers :(",style:  TextStyle(
+                            color: Colors.grey[400],
+                            fontFamily: "Poppins",
+                            fontSize: 16
+                        ),),
+                      ),
+                      SizedBox(height: 15,),
+                    ],
+                  )
 
                 ],
               )

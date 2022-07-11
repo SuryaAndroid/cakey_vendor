@@ -79,6 +79,7 @@ class _CakesListState extends State<CakesList> {
           getCakes(vendorId);
       }
       else {
+        checkNetwork();
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -89,6 +90,7 @@ class _CakesListState extends State<CakesList> {
         );
       }
     }catch(e){
+      checkNetwork();
       Navigator.pop(context);
     }
 
@@ -130,7 +132,7 @@ class _CakesListState extends State<CakesList> {
       }
 
     }catch(e){
-
+      checkNetwork();
     }
 
   }
@@ -164,6 +166,9 @@ class _CakesListState extends State<CakesList> {
     }else{
       shapes.insert(0, {"Name":"${filteredCakeList[i]['BasicShape']}" , "Price":"0"});
     }
+
+    //Tiers
+    List tiers = filteredCakeList[i]['TierCakeMinWeightAndPrice'].toList();
 
     //img
     if(images.isEmpty){
@@ -213,6 +218,7 @@ class _CakesListState extends State<CakesList> {
         MaterialPageRoute(builder: (context)=>CakeDetails(
           flavours: flavs,
           shapes: shapes,
+          tiers: tiers,
         ))
     );
 
@@ -415,6 +421,7 @@ class _CakesListState extends State<CakesList> {
             getInitialPrefs();
           },
           child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //Cake types List...
                 Container(
@@ -447,7 +454,8 @@ class _CakesListState extends State<CakesList> {
                                 Icon(Icons.cake_outlined , color: Colors.pink,),
                                 SizedBox(width: 10,),
                                 Text("${cakeTypes[i]}" , style: TextStyle(
-                                  color: alertsAndColors.darkBlue
+                                  color: alertsAndColors.darkBlue ,
+                                  fontFamily: "Poppins"
                                 ),)
                               ],
                             ),

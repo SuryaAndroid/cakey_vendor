@@ -1,3 +1,4 @@
+import 'package:cakey_vendor/Drawer/AddCakes.dart';
 import 'package:cakey_vendor/Drawer/CakesList.dart';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
 import 'package:flutter/material.dart';
@@ -288,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: InkWell(
                             onTap: ()=>Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context)=>CakesList())
+                                MaterialPageRoute(builder: (context)=>AddCakes())
                             ),
                             child: Container(
                               height: 160,
