@@ -56,8 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
       var request = http.Request('POST', Uri.parse('https://cakey-database.vercel.app/api/login/validate'));
 
       request.body = json.encode({
-        "Email": email.text.toString(),
-        "Password": password.text.toString()
+        "Email": email.text.toString().trim(),
+        "Password": password.text.toString().trim()
       });
 
       request.headers.addAll(headers);
@@ -202,6 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 TextField(
                   controller: password,
+                  obscureText: true,
                   style: TextStyle(
                       fontFamily: "Poppins",
                       fontSize: 15,
