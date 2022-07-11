@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
 import 'package:flutter/material.dart';
+import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart' as Path;
+import 'package:http_parser/http_parser.dart';
 
 class AddCakes extends StatefulWidget {
   const AddCakes({Key? key}) : super(key: key);
@@ -35,6 +38,7 @@ class _AddCakesState extends State<AddCakes> {
   String tierPoss = "No";
   String howGood = "Good";
   String howManyTime = "Never";
+  String fullCustomPoss = "No";
 
   String minimumTime = "";
   String beforeDays = "";
@@ -278,6 +282,130 @@ class _AddCakesState extends State<AddCakes> {
             behavior: SnackBarBehavior.floating,
           )
       );
+    }else if(file.path.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Please select a image file"),
+            behavior: SnackBarBehavior.floating,
+          )
+      );
+    }else{
+      addCake();
+    }
+  }
+
+  //addCake
+  Future<void> addCake() async{
+
+    List tempFlav = [];
+    List tempShape = [];
+    List tempWeight = [];
+
+    if(fixedFlavList.isNotEmpty){
+      for(int i =0; i<fixedFlavList.length;i++){
+        tempFlav.add(jsonEncode(fixedFlavList[i]));
+      }
+    }
+    
+    if(fixedShapeList.isNotEmpty){
+      for(int i =0; i<fixedShapeList.length;i++){
+        tempShape.add(jsonEncode(fixedShapeList[i]));
+      }
+    }
+    
+    if(fixedWeightList.isNotEmpty){
+      for(int i =0; i<fixedWeightList.length;i++){
+        tempWeight.add(jsonEncode(fixedWeightList[i]));
+      }
+    }
+    
+    alertsAndColors.showLoader(context);
+    var request = http.MultipartRequest('POST', Uri.parse('https://cakey-database.vercel.app/api/cake/new'));
+    request.fields.addAll({
+      'CakeName': cakeName.text,
+      'CakeCommonName':cakeCommonName.text,
+      'BasicFlavour': cakeFlav.text,
+      'BasicShape': cakeShape.text,
+      'MinWeight': cakeWeight.text,
+      'BasicCakePrice': cakePrice.text,
+      'DefaultCakeEggOrEggless':egg,
+      'IsEgglessOptionAvailable': egglessPoss,
+      'BasicEgglessCostPerKg': cakeEgglessPrice.text,
+      'IsTierCakePossible': tierPoss.toLowerCase()=="yes"?'y':'n',
+      'ThemeCakePossible': themePoss.toLowerCase()=="yes"?'y':'n',
+      'ToppersPossible': topperPoss.toLowerCase()=="yes"?'y':'n',
+      'MinTimeForDeliveryOfDefaultCake': minimumTime,
+      'FullCustomisationPossible': fullCustomPoss.toLowerCase()=="yes"?'y':'n',
+      'CakeBase': cakeBase,
+      'CakeCream': cakeCream,
+      'BestUsedBefore': beforeDays,
+      'ToBeStoredIn': tobeStore,
+      'KeepTheCakeInRoomTemperature': cakeRoomTime,
+      'Description': cakeDescription.text,
+      'HowGoodAreYouWithTheCake': howGood,
+      'HowManyTimesHaveYouBakedThisParticularCake': howManyTime,
+      'VendorID': '628478c595eb4f0b50bd0658',
+      'Vendor_ID': 'CKYV-7',
+      'VendorName': 'Madhu Priya',
+      'VendorPhoneNumber1': '9876543211',
+      'VendorPhoneNumber2': '8642135790',
+      'Street': 'No.10',
+      'City': 'Coimbatore',
+      'State': 'Tamilnadu',
+      'Pincode': '641114',
+      'Discount': cakeDiscount.text,
+      'Tax': gstAmt.toString()
+    });
+
+    if(basicCus.toLowerCase()=="yes"){
+      request.fields.addAll(
+        {
+          'BasicCustomisationPossible': 'y',
+          'CustomFlavourList': "$tempFlav",
+          'CustomShapeList': "$tempShape",
+          'MinWeightList': "$tempWeight",
+        }
+      );
+    }else{
+      request.fields.addAll(
+          {
+            'BasicCustomisationPossible': 'n',
+          }
+      );
+    }
+
+    request.files.add(await http.MultipartFile.fromPath(
+        'files', file.path.toString(),
+        filename: Path.basename(file.path),
+        contentType: MediaType.parse(lookupMimeType(file.path.toString()).toString())
+    ));
+
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Cake added!"),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.green,
+          )
+      );
+
+      Navigator.pop(context);
+    }
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error Occurred"),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red,
+          )
+      );
+      Navigator.pop(context);
+      print(response.reasonPhrase);
     }
 
   }
@@ -1320,6 +1448,40 @@ class _AddCakesState extends State<AddCakes> {
                         onChanged: (item){
                           setState((){
                             tierPoss = item.toString();
+                          });
+                        },
+                      ),
+                    ),
+
+                    //tier
+                    SizedBox(height: 10,),
+                    Text("Fully Customizable * ",
+                      style: TextStyle(
+                          color: alertsAndColors.darkBlue ,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: DropdownButton(
+                        isExpanded: true,
+                        value: "$fullCustomPoss",
+                        hint: Text("Select"),
+                        items: <DropdownMenuItem<String>>[
+                          DropdownMenuItem(
+                              value:"Yes",
+                              child: Text("Yes")
+                          ),
+                          DropdownMenuItem(
+                              value:"No",
+                              child: Text("No")
+                          ),
+                        ],
+                        onChanged: (item){
+                          setState((){
+                            fullCustomPoss = item.toString();
                           });
                         },
                       ),
