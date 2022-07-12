@@ -1,5 +1,6 @@
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:cakey_vendor/Drawer/AddCakes.dart';
+import 'package:cakey_vendor/Drawer/EditCake.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -273,7 +274,7 @@ class _CakeDetailsState extends State<CakeDetails> {
                                   onPressed: (){
                                     Navigator.push(
                                         context, 
-                                        MaterialPageRoute(builder: (context)=>AddCakes())
+                                        MaterialPageRoute(builder: (context)=>EditCake())
                                     );
                                   },
                                   child: Text("EDIT" ,style: TextStyle(
