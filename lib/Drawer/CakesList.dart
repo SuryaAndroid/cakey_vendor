@@ -26,6 +26,7 @@ class _CakesListState extends State<CakesList> {
   var vendorId;
   var authToken = "";
   var filteredCakeType = "";
+  bool loading = true;
 
   @override
   void initState(){
@@ -52,14 +53,14 @@ class _CakesListState extends State<CakesList> {
 
     alertsAndColors.showLoader(context);
 
-    var map = [];
     var list = [];
     try{
       var headers = {
         'Authorization': '$authToken'
       };
 
-      var request = http.Request('GET', Uri.parse('https://cakey-database.vercel.app/api/vendors/list'));
+      var request = http.Request('GET',
+          Uri.parse('https://cakey-database.vercel.app/api/vendors/listbyemail/$vendorMail'));
 
       request.headers.addAll(headers);
 
@@ -67,19 +68,22 @@ class _CakesListState extends State<CakesList> {
 
       if (response.statusCode == 200) {
 
-          Navigator.pop(context);
-
-          map = jsonDecode(await response.stream.bytesToString());
-          list = map.where((element) => element['Email'].toString().toLowerCase()==vendorMail.toLowerCase()).toList();
+          list = jsonDecode(await response.stream.bytesToString());
 
           setState((){
             vendorId = list[0]['_id'];
           });
 
           getCakes(vendorId);
+
+          Navigator.pop(context);
+
       }
       else {
         checkNetwork();
+        setState((){
+          loading = false;
+        });
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -90,7 +94,11 @@ class _CakesListState extends State<CakesList> {
         );
       }
     }catch(e){
+      print(e);
       checkNetwork();
+      setState((){
+        loading = false;
+      });
       Navigator.pop(context);
     }
 
@@ -124,15 +132,28 @@ class _CakesListState extends State<CakesList> {
           }
 
           cakeTypes = cakeTypes.toSet().toList();
-        });
 
+          print(cakeList);
+
+          setState((){
+            loading = false;
+          });
+
+        });
       }
       else {
         print(response.reasonPhrase);
+        setState((){
+          loading = false;
+        });
       }
 
     }catch(e){
       checkNetwork();
+      setState((){
+        loading = false;
+      });
+      print(e);
     }
 
   }
@@ -196,9 +217,13 @@ class _CakesListState extends State<CakesList> {
     pref.remove("cakePrice");
     pref.remove("cakeEgg");
     pref.remove("cakeDesc");
+    pref.remove("cakeStatus");
     pref.remove("cakeImages");
     pref.remove("cakeWeight");
-
+    pref.remove("cake_id");
+    pref.remove("cakeId");
+    pref.remove("cakeTierPoss");
+    pref.remove("cakeCustomPoss");
 
 
     pref.setString("cakeName", filteredCakeList[i]['CakeName']);
@@ -206,11 +231,15 @@ class _CakesListState extends State<CakesList> {
     pref.setString("cakePrice", filteredCakeList[i]['BasicCakePrice']);
     pref.setString("cakeEgg", filteredCakeList[i]['DefaultCakeEggOrEggless']);
     pref.setString("cakeDesc", filteredCakeList[i]['Description']);
+    pref.setString("cakeStatus", filteredCakeList[i]['Status']);
+    pref.setString("cake_id", filteredCakeList[i]['_id']);
+    pref.setString("cakeId", filteredCakeList[i]['Id']);
+    pref.setString("cakeTierPoss", filteredCakeList[i]['IsTierCakePossible']);
+    pref.setString("cakeCustomPoss", filteredCakeList[i]['BasicCustomisationPossible']);
 
 
     pref.setStringList("cakeImages", shareImg);
     pref.setStringList("cakeWeight", shareWeight);
-
 
 
     Navigator.push(
@@ -223,7 +252,6 @@ class _CakesListState extends State<CakesList> {
     );
 
   }
-
 
   //network check
   Future<void> checkNetwork() async{
@@ -341,7 +369,6 @@ class _CakesListState extends State<CakesList> {
                         children: [
                           InkWell(
                             onTap: () {
-
                             },
                             child: Container(
                               padding: EdgeInsets.all(3),
@@ -626,9 +653,9 @@ class _CakesListState extends State<CakesList> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.hourglass_empty, size: 40,color: Colors.red,) ,
+                        Icon(!loading?Icons.not_interested_rounded:Icons.hourglass_empty, size: 40,color: Colors.red,) ,
                         SizedBox(height: 20,),
-                        Text("No Cakes Found" ,style: TextStyle(
+                        Text(!loading?"No Cakes Found":"Loading...",style: TextStyle(
                             color: alertsAndColors.lightPink,
                             fontFamily: "Poppins",
                             fontSize: 18

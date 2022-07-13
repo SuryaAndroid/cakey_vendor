@@ -12,8 +12,8 @@ class CakeDetails extends StatefulWidget {
   State<CakeDetails> createState() => _CakeDetailsState(flavours: flavours , shapes: shapes , tiers: tiers);
 }
 
-class _CakeDetailsState extends State<CakeDetails> {
-  var flavours , shapes , tiers;
+class _CakeDetailsState extends State<CakeDetails>{
+  List flavours , shapes , tiers;
   _CakeDetailsState({required this.flavours, required this.shapes ,required this.tiers });
 
   AlertsAndColors alertsAndColors = new AlertsAndColors();
@@ -22,6 +22,11 @@ class _CakeDetailsState extends State<CakeDetails> {
   String cakePrice = "";
   String cakeDesc = "";
   String egg = "";
+  String status = "";
+  String cake_id = "";
+  String cakeId = "";
+  String cakeCustomPossible = "";
+  String cakeTierPoss = "";
 
   List<String> images = [];
   var weights = [];
@@ -39,59 +44,52 @@ class _CakeDetailsState extends State<CakeDetails> {
     var pref = await SharedPreferences.getInstance();
 
     setState((){
+
       cakeName = pref.getString("cakeName")??"";
       cakePrice = pref.getString("cakePrice")??"";
       cakeDesc = pref.getString("cakeDesc")??"";
       egg = pref.getString("cakeEgg")??"";
+      status = pref.getString("cakeStatus")??"";
+      cake_id = pref.getString("cake_id")??"";
+      cakeId = pref.getString("cakeId")??"";
+      cakeCustomPossible = pref.getString("cakeCustomPoss")??"";
+      cakeTierPoss = pref.getString("cakeTierPoss")??"";
 
       images = pref.getStringList('cakeImages')??[];
       weights = pref.getStringList('cakeWeight')??[];
-
 
     });
 
   }
 
-  List<Widget> _buildPageIndicator() {
-    List<Widget> list = [];
-    for (int i = 0; i < images.length; i++) {
-      list.add(i == pageViewCurIndex ? _indicator(true) : _indicator(false));
-    }
-    return list;
-  }
 
-  Widget _indicator(bool isActive) {
-    return AnimatedContainer(
-      duration: Duration(seconds: 1),
-      curve: Curves.linear,
-      height: 10,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 4.0),
-        height: isActive ? 10 : 8.0,
-        width: isActive ? 12 : 8.0,
-        decoration: BoxDecoration(
-          boxShadow: [
-            isActive
-                ? BoxShadow(
-              color: Color(0XFF2FB7B2).withOpacity(0.72),
-              blurRadius: 4.0,
-              spreadRadius: 1.0,
-              offset: Offset(
-                0.0,
-                0.0,
-              ),
-            )
-                : BoxShadow(
-              color: Colors.transparent,
-            )
-          ],
-          shape: BoxShape.circle,
-          color: isActive ? alertsAndColors.lightPink : Color(0XFFEAEAEA),
-        ),
-      ),
+  Future<void> passDataToEdit() async{
+    var pref = await SharedPreferences.getInstance();
+
+    pref.remove("cakeEd_id");
+    pref.remove("cakeEdId");
+    pref.remove("cakeEdName");
+    pref.remove("cakeEdPrice");
+    pref.remove("cakeEdCustomPoss");
+    pref.remove("cakeEdTierPoss");
+
+    pref.setString("cakeEd_id", cake_id);
+    pref.setString("cakeEdId", cakeId);
+    pref.setString("cakeEdName", cakeName);
+    pref.setString("cakeEdPrice", cakePrice);
+    pref.setString("cakeEdTierPoss", cakeTierPoss);
+    pref.setString("cakeEdCustomPoss", cakeCustomPossible);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context)=>EditCake(
+          flavoursList: flavours,
+          shapeList: shapes,
+          tierList: tiers,
+          weightList: weights,
+        ))
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -271,12 +269,7 @@ class _CakeDetailsState extends State<CakeDetails> {
                               child: Padding(
                                 padding:EdgeInsets.only(right: 8, top: 5),
                                 child: RaisedButton(
-                                  onPressed: (){
-                                    Navigator.push(
-                                        context, 
-                                        MaterialPageRoute(builder: (context)=>EditCake())
-                                    );
-                                  },
+                                  onPressed: ()=>passDataToEdit(),
                                   child: Text("EDIT" ,style: TextStyle(
                                       color: Colors.orange,
                                       fontWeight: FontWeight.bold,
@@ -375,6 +368,27 @@ class _CakeDetailsState extends State<CakeDetails> {
                       fontFamily: "Poppins"
                   ),),
                   SizedBox(height: 15,),
+
+                  //status....
+                  Text("STATUS" , style: TextStyle(
+                      color: alertsAndColors.darkBlue,
+                      fontSize:15,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.bold
+                  ),),
+                  SizedBox(height: 6,),
+                  Divider(
+                    height: 1,
+                    color: Colors.grey[400],
+                  ),
+                  Text("$status" , style: TextStyle(
+                      color: status.toLowerCase()=="new"?
+                      Colors.red:status.toLowerCase()=="approved"?
+                      Colors.green:Colors.grey[400],
+                      fontSize:14,
+                      fontFamily: "Poppins"
+                  ),),
+                  SizedBox(height: 10,),
 
                   //ui flavours
                   Text("FLAVOURS" , style: TextStyle(
