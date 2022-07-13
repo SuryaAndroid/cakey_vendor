@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +31,8 @@ class _EditCakeState extends State<EditCake> {
   //controllers
   var cakePrice = new TextEditingController(text: "200");
   var extraShapeCtrl = new TextEditingController();
+  var threekgCtrl = TextEditingController();
+  var fvkgCtrl = TextEditingController();
 
   //Strings
   String authToken= "";
@@ -42,6 +44,21 @@ class _EditCakeState extends State<EditCake> {
   String stocks = "Instock";
   String tierPoss = "No";
   String basicCus = "No";
+  String threekgHourorMin = "Hour";
+  String fvkgHourorMin = "Hour";
+
+  //vendors
+  List myVendorList = [];
+  String currentVendorMail = "";
+  String currentVendorName = "";
+  String currentVendorStreet = "";
+  String currentVendorCity = "";
+  String currentVendorState= "";
+  String currentVendorPin = "";
+  String currentVendorPhn1 = "";
+  String currentVendorPhn2 = "";
+  String currentVendor_id = "";
+  String currentVendorId = "";
 
   //Lists /*shape*/
   List<bool> isShapetTapped = [];
@@ -71,18 +88,105 @@ class _EditCakeState extends State<EditCake> {
 
   //
 
+  //getVendors
+  Future<void> getVendor() async{
+
+    print(currentVendorMail);
+
+    alertsAndColors.showLoader(context);
+    List myList = [];
+
+    try{
+
+      var headers = {
+        'Authorization': '$authToken'
+      };
+
+      var request = http.Request('GET',
+          Uri.parse('https://cakey-database.vercel.app/api/vendors/list'));
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+
+        myList = jsonDecode(await response.stream.bytesToString());
+
+        setState((){
+          myVendorList = myList.where((element) => element['Email'].toString().toLowerCase()
+              ==currentVendorMail.toLowerCase()).toList();
+
+          myVendorList = myVendorList.reversed.toList();
+          myVendorList = myVendorList.toSet().toList();
+
+          currentVendorName = myVendorList[0]['VendorName'].toString();
+          currentVendor_id = myVendorList[0]['_id'].toString();
+          currentVendorId = myVendorList[0]['Id'].toString() ;
+          currentVendorPhn1 = myVendorList[0]['PhoneNumber1'].toString();
+          currentVendorPhn2 = myVendorList[0]['PhoneNumber2'].toString();
+          currentVendorCity = myVendorList[0]["Address"]['City'].toString();
+          currentVendorStreet = myVendorList[0]["Address"]['Street'].toString();
+          currentVendorState = myVendorList[0]["Address"]['State'].toString();
+          currentVendorPin= myVendorList[0]["Address"]['Pincode'].toString();
+
+        });
+
+        print(myVendorList[0]['Email']);
+
+        Navigator.pop(context);
+      }
+      else {
+        print(response.reasonPhrase);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Unable to get vendor details :${response.reasonPhrase}"),
+              backgroundColor: Colors.brown,
+              behavior: SnackBarBehavior.floating,
+            )
+        );
+
+        Navigator.pop(context);
+      }
+    }catch(e){
+      checkNetwork();
+      Navigator.pop(context);
+    }
+
+  }
+
+  //network check
+  Future<void> checkNetwork() async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Internet Not Connected"),
+            backgroundColor: Colors.brown,
+            behavior: SnackBarBehavior.floating,
+          )
+      );
+      print('not connected');
+    }
+  }
+
   Future<void> getEditData() async{
     var pref = await SharedPreferences.getInstance();
 
     setState((){
       authToken = pref.getString("authToken")??"null";
+      currentVendorMail = pref.getString("authMail")??"null";
       cakeName = pref.getString("cakeEdName")??"null";
       cakePrice.text = pref.getString("cakeEdPrice")??"null";
       cake_id = pref.getString("cakeEd_id")??"null";
       cakeId = pref.getString("cakeEdId")??"null";
       cakeCustomPossible = pref.getString("cakeEdCustomPoss")??"null";
       cakeTierPoss = pref.getString("cakeEdTierPoss")??"null";
-
 
       print(cakeCustomPossible);
       print(cakeTierPoss);
@@ -99,11 +203,9 @@ class _EditCakeState extends State<EditCake> {
         tierPoss = "Yes";
       }
 
-
     });
-
+    getVendor();
     getShapes();
-    setUpTiers();
   }
 
   //getShapes
@@ -205,9 +307,7 @@ class _EditCakeState extends State<EditCake> {
 
       setState((){
         for(int i = 0 ; i<weightList.length;i++){
-          fixedWeightList.add({
-            "Weight":weightList[i]
-          });
+          fixedWeightList.add(weightList[i]);
         }
         spareWeightList = myFlavList;
         spareWeightList = spareWeightList.reversed.toList();
@@ -236,6 +336,133 @@ class _EditCakeState extends State<EditCake> {
         });
       }
     });
+  }
+
+  //update cake
+  Future<void> updateCake() async{
+
+    alertsAndColors.showLoader(context);
+
+    List tempWeight = fixedWeightList;
+    List tempFlav = fixedFlavList;
+    List tempShape = fixedShapeList;
+
+    // print("wei $fixedWeightList");
+    // print("flav $fixedFlavList");
+    // print("shape $fixedShapeList");
+
+    //stringifying
+    jsonEncode(tempWeight);
+    jsonEncode(tempFlav);
+    jsonEncode(tempShape);
+
+    print({
+      'CustomFlavourList': jsonEncode(tempFlav),
+      'CustomShapeList': jsonEncode(tempShape),
+      'MinWeightList': jsonEncode(tempWeight),
+      'Vendor_ID': currentVendorId,
+      'VendorName': currentVendorName,
+      'VendorPhoneNumber1': currentVendorPhn1,
+      'VendorPhoneNumber2': currentVendorPhn2,
+      'Street': currentVendorStreet,
+      'City': currentVendorCity,
+      'State': currentVendorState,
+      'Pincode': currentVendorPin,
+      'Stock': stocks,
+      'OldSampleImages': '[""]',
+      'VendorID': currentVendor_id,
+      'BasicCustomisationPossible': basicCus.toLowerCase()=="yes"?'y':'n',
+      'BasicCakePrice': cakePrice.text.toString()
+    });
+
+
+    try{
+      var request = http.MultipartRequest('PUT', Uri.parse('https://cakey-database.vercel.app/api/cake/update/$cake_id'));
+      request.fields.addAll({
+        'CustomFlavourList': jsonEncode(tempFlav),
+        'CustomShapeList': jsonEncode(tempShape),
+        'MinWeightList': jsonEncode(tempWeight),
+        'Vendor_ID': currentVendorId,
+        'VendorName': currentVendorName,
+        'VendorPhoneNumber1': currentVendorPhn1,
+        'VendorPhoneNumber2': currentVendorPhn2,
+        'Street': currentVendorStreet,
+        'City': currentVendorCity,
+        'State': currentVendorState,
+        'Pincode': currentVendorPin,
+        'Stock': stocks,
+        'OldSampleImages': '[""]',
+        'VendorID': currentVendor_id,
+        'BasicCustomisationPossible': basicCus.toLowerCase()=="yes"?'y':'n',
+        'BasicCakePrice': cakePrice.text.toString()
+      });
+
+      if(fixedWeightList.contains("3Kg")||fixedWeightList.contains("3kg")||
+          fixedWeightList.contains("3KG")){
+        request.fields.addAll({
+          'MinTimeForDeliveryOfA3KgCake': "${threekgCtrl.text}${threekgHourorMin.toLowerCase()}",
+        });
+      }
+
+      if(fixedWeightList.contains("5Kg")||fixedWeightList.contains("5kg")||
+          fixedWeightList.contains("5KG")){
+        request.fields.addAll({
+          'MinTimeForDeliveryOfA5KgCake': "${fvkgCtrl.text}${fvkgHourorMin.toLowerCase()}",
+        });
+      }
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        var map = jsonDecode(await response.stream.bytesToString());
+
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("${map["message"]}"),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.green,
+            )
+        );
+
+        Navigator.pop(context);
+      }
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Error Occurred"),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.red,
+            )
+        );
+        Navigator.pop(context);
+        print(response.reasonPhrase);
+      }
+
+    }catch(e){
+      checkNetwork();
+      Navigator.pop(context);
+    }
+
+  }
+
+  void validateInputs(){
+    if(fixedWeightList.contains("3kg")&&threekgCtrl.text.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Please enter minimum delivery time of 3kg"),
+            behavior: SnackBarBehavior.floating,
+          )
+      );
+    }else if(fixedWeightList.contains("5kg")&&fvkgCtrl.text.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Please enter minimum delivery time of 5kg"),
+            behavior: SnackBarBehavior.floating,
+          )
+      );
+    }else{
+      updateCake();
+    }
   }
 
 
@@ -1228,7 +1455,7 @@ class _EditCakeState extends State<EditCake> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text(e['Weight'], style: TextStyle(
+                                          Text(e.toString(), style: TextStyle(
                                               color: alertsAndColors.darkBlue,
                                               fontFamily: "Poppins"
                                           ),),
@@ -1263,7 +1490,7 @@ class _EditCakeState extends State<EditCake> {
                                                   GestureDetector(
                                                     onTap: ()=>setState((){
                                                       if(fixedWeightList.isNotEmpty){
-                                                        fixedWeightList.removeWhere((element) => element['Weight']
+                                                        fixedWeightList.removeWhere((element) => element
                                                             ==spareWeightList[i]['Weight']);
                                                         isWeightTapped[i]=false;
                                                         print(fixedWeightList);
@@ -1285,9 +1512,7 @@ class _EditCakeState extends State<EditCake> {
                                                 onTap: ()=>setState((){
                                                   isWeightTapped[i] = true;
                                                   fixedWeightList.add(
-                                                      {
-                                                        "Weight":'${spareWeightList[i]['Weight']}',
-                                                      }
+                                                     '${spareWeightList[i]['Weight']}',
                                                   );
                                                 }),
                                                 child: Icon(Icons.add_circle , color: Colors.green,),
@@ -1322,6 +1547,163 @@ class _EditCakeState extends State<EditCake> {
                 ],
               ):Container(),
 
+              //3kg
+              fixedWeightList.contains("3Kg")||fixedWeightList.contains("3kg")||
+                  fixedWeightList.contains("3KG")?
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10,),
+                  Text("Min Time For Delivery Of 3Kg Cake * ",
+                    style: TextStyle(
+                        color: alertsAndColors.darkBlue ,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: TextField(
+                          controller:threekgCtrl,
+                          onChanged: (e){
+                            setState((){
+                              threekgHourorMin = threekgCtrl.text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Min Time For Delivery Of 3Kg Cake",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide(width: 1, color: Colors.grey)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5,),
+                      Expanded(
+                        flex: 1,
+                        child: PopupMenuButton(
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.only(left:5 , right: 5),
+                              height: 60,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey , width: 1),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Text(
+                                "${threekgCtrl.text} $threekgHourorMin",
+                                style: TextStyle(
+                                  color: alertsAndColors.darkBlue,
+                                  fontFamily: "Poppins",
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            itemBuilder: (c)=>
+                            [
+                              PopupMenuItem(
+                                  onTap: ()=>setState((){threekgHourorMin = "Days";}),
+                                  child: Text("Days")
+                              ),
+                              PopupMenuItem(
+                                  onTap: ()=>setState((){threekgHourorMin = "Hours";}),
+                                  child: Text("Hours")
+                              ),
+                              PopupMenuItem(
+                                  onTap: ()=>setState((){threekgHourorMin = "Mins";}),
+                                  child: Text("minutes")
+                              ),
+                            ]
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                ],
+              ):Container(),
+
+              //5kg
+              fixedWeightList.contains("5Kg")||fixedWeightList.contains("5kg")||
+                  fixedWeightList.contains("5KG")?
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10,),
+                  Text("Min Time For Delivery Of 5Kg Cake * ",
+                    style: TextStyle(
+                        color: alertsAndColors.darkBlue ,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: TextField(
+                          controller:fvkgCtrl,
+                          onChanged: (e){
+                            setState((){
+                              fvkgHourorMin = fvkgCtrl.text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Min Time For Delivery Of 5Kg Cake",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide(width: 1, color: Colors.grey)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5,),
+                      Expanded(
+                        flex: 1,
+                        child: PopupMenuButton(
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.only(left:5 , right: 5),
+                              height: 60,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey , width: 1),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Text(
+                                "${fvkgCtrl.text} $fvkgHourorMin",
+                                style: TextStyle(
+                                  color: alertsAndColors.darkBlue,
+                                  fontFamily: "Poppins",
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            itemBuilder: (c)=>
+                            [
+                              PopupMenuItem(
+                                  onTap: ()=>setState((){fvkgHourorMin = "Days";}),
+                                  child: Text("Days")
+                              ),
+                              PopupMenuItem(
+                                  onTap: ()=>setState((){fvkgHourorMin = "Hours";}),
+                                  child: Text("Hours")
+                              ),
+                              PopupMenuItem(
+                                  onTap: ()=>setState((){fvkgHourorMin = "Mins";}),
+                                  child: Text("minutes")
+                              ),
+                            ]
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                ],
+              ):Container(),
               SizedBox(height: 20,),
 
               Center(
@@ -1333,7 +1715,7 @@ class _EditCakeState extends State<EditCake> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)
                     ),
-                    onPressed: (){},
+                    onPressed: ()=>validateInputs(),
                     child: Text(
                       "UPDATE" ,
                       style: TextStyle(
@@ -1346,7 +1728,6 @@ class _EditCakeState extends State<EditCake> {
               ),
 
               SizedBox(height: 20,),
-
               //col end
             ],
           ),

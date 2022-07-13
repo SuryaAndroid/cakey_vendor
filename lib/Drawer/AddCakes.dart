@@ -503,49 +503,48 @@ class _AddCakesState extends State<AddCakes> {
   Future<void> addCake() async{
     alertsAndColors.showLoader(context);
 
-    List tempFlav = [];
-    List tempShape = [];
-    List tempWeight = [];
-
-    List tempTier = [];
-    List tempTierTime = [];
-
-    fixedMinTimeTires.removeWhere((element) => element=="value");
-
-    print(fixedMinTimeTires);
-
-    if(fixedFlavList.isNotEmpty){
-      for(int i =0; i<fixedFlavList.length;i++){
-        tempFlav.add(jsonEncode(fixedFlavList[i]));
-      }
-    }
-    
-    if(fixedShapeList.isNotEmpty){
-      for(int i =0; i<fixedShapeList.length;i++){
-        tempShape.add(jsonEncode(fixedShapeList[i]));
-      }
-    }
-    
-    if(fixedWeightList.isNotEmpty){
-      for(int i =0; i<fixedWeightList.length;i++){
-        tempWeight.add(jsonEncode(fixedWeightList[i]));
-      }
-    }
-
-    if(fixedTierList.isNotEmpty){
-      for(int i =0; i<fixedTierList.length;i++){
-        tempTier.add(jsonEncode(fixedTierList[i]));
-      }
-    }
-
-    if(fixedMinTimeTires.isNotEmpty){
-      for(int i =0; i<fixedMinTimeTires.length;i++){
-        tempTierTime.add(jsonEncode(fixedMinTimeTires[i]));
-      }
-    }
-
-
-    print(tempTier);
+    // List tempFlav = [];
+    // List tempShape = [];
+    // List tempWeight = [];
+    //
+    // List tempTier = [];
+    // List tempTierTime = [];
+    //
+    // fixedMinTimeTires.removeWhere((element) => element=="value");
+    //
+    // print(fixedMinTimeTires);
+    //
+    // if(fixedFlavList.isNotEmpty){
+    //   for(int i =0; i<fixedFlavList.length;i++){
+    //     tempFlav.add(jsonEncode(fixedFlavList[i]));
+    //   }
+    // }
+    //
+    // if(fixedShapeList.isNotEmpty){
+    //   for(int i =0; i<fixedShapeList.length;i++){
+    //     tempShape.add(jsonEncode(fixedShapeList[i]));
+    //   }
+    // }
+    //
+    // if(fixedWeightList.isNotEmpty){
+    //   for(int i =0; i<fixedWeightList.length;i++){
+    //     tempWeight.add(jsonEncode(fixedWeightList[i]));
+    //   }
+    // }
+    //
+    // if(fixedTierList.isNotEmpty){
+    //   for(int i =0; i<fixedTierList.length;i++){
+    //     tempTier.add(jsonEncode(fixedTierList[i]));
+    //   }
+    // }
+    //
+    // if(fixedMinTimeTires.isNotEmpty){
+    //   for(int i =0; i<fixedMinTimeTires.length;i++){
+    //     tempTierTime.add(jsonEncode(fixedMinTimeTires[i]));
+    //   }
+    // }
+    //
+    // print(tempTier);
 
     print({
       'CakeName': cakeName.text,
@@ -573,9 +572,9 @@ class _AddCakesState extends State<AddCakes> {
       'Discount': cakeDiscount.text,
       'Tax': gstAmt.toString(),
       'BasicCustomisationPossible': basicCus,
-      'CustomFlavourList': "$tempFlav",
-      'CustomShapeList': "$tempShape",
-      'MinWeightList': "$tempWeight",
+      'CustomFlavourList': jsonEncode(fixedFlavList),
+      'CustomShapeList': jsonEncode(fixedShapeList),
+      'MinWeightList': jsonEncode(fixedWeightList),
       'VendorID': '$currentVendor_id',
       'Vendor_ID': '$currentVendorId',
       'VendorName': '$currentVendorName',
@@ -586,7 +585,6 @@ class _AddCakesState extends State<AddCakes> {
       'State': '$currentVendorState',
       'Pincode': '$currentVendorPin',
     });
-
 
     try{
 
@@ -630,9 +628,9 @@ class _AddCakesState extends State<AddCakes> {
         request.fields.addAll(
             {
               'BasicCustomisationPossible': 'y',
-              'CustomFlavourList': "$tempFlav",
-              'CustomShapeList': "$tempShape",
-              'MinWeightList': "$tempWeight",
+              'CustomFlavourList': jsonEncode(fixedFlavList),
+              'CustomShapeList': jsonEncode(fixedShapeList),
+              'MinWeightList': jsonEncode(fixedWeightList),
             }
         );
       }
@@ -663,8 +661,8 @@ class _AddCakesState extends State<AddCakes> {
       if(tierPoss.toLowerCase()=="yes"){
         request.fields.addAll({
           'IsTierCakePossible': "y",
-          'TierCakeMinWeightAndPrice':"$tempTier",
-          'MinTimeForDeliveryFortierCake':"$tempTierTime",
+          'TierCakeMinWeightAndPrice':jsonEncode(fixedTierList),
+          'MinTimeForDeliveryFortierCake':jsonEncode(fixedMinTimeTires),
         });
       }else{
         request.fields.addAll({
