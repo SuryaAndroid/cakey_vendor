@@ -506,6 +506,7 @@ class _CakesListState extends State<CakesList> {
                   child: Container(
                     width: double.infinity,
                     child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
                       child: Column(
                         children: [
                           StaggeredGridView.countBuilder(

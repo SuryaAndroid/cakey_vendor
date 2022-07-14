@@ -232,7 +232,7 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
               title: Container(
                 width: 180,
-                child: Text('Categories',
+                child: Text('Customize Cakes',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: AlertsAndColors().darkBlue,fontFamily: "Poppins",fontSize: 16),
                 ),

@@ -260,6 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             });
           },
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

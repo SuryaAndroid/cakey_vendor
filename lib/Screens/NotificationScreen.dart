@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:grouped_list/grouped_list.dart';
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -94,6 +94,35 @@ class _NotificationScreenState extends State<NotificationScreen> {
       List map = jsonDecode(await response.stream.bytesToString());
       setState((){
         newOrders = map.where((element) => element['Status'].toString().toLowerCase()=="new").toList();
+        getCustomiseOrders(vendorId);
+      });
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> getCustomiseOrders(String id) async{
+
+    List oldList = [];
+    var headers = {
+      'Authorization': '$authToken'
+    };
+    var request = http.Request('GET',
+        Uri.parse('https://cakey-database.vercel.app/api/customize/cake/listbyvendorid/$id'));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      List map = jsonDecode(await response.stream.bytesToString());
+      setState((){
+        oldList = map.where((element) => element['Status'].toString().toLowerCase()=="new").toList();
+        oldList = oldList + map.where((element) => element['Status'].toString().toLowerCase()=="assigned").toList();
+        oldList = oldList.reversed.toList();
+        newOrders = oldList + newOrders;
+        newOrders.sort((a,b)=>a['Created_On'].toString().compareTo(simplyFormat(time: DateTime.now(),dateOnly: false).toString()));
         newOrders = newOrders.reversed.toList();
       });
     }
@@ -181,90 +210,173 @@ class _NotificationScreenState extends State<NotificationScreen> {
           )
       ),
       body: Container(
-        child:SingleChildScrollView(
-          child: newOrders.length>0?
-          Column(
-            children:newOrders.map((e){
-              return InkWell(
-                onTap: (){
-                  print(formateToDay(e['Created_On'].toString().split(" ").first));
+        height: MediaQuery.of(context).size.height*0.9,
+        child:RefreshIndicator(
+          onRefresh: () async{
+            getIniitialPrefs();
+          },
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: newOrders.length>0?
+            GroupedListView<dynamic , String>(
+                elements: newOrders,
+                shrinkWrap: true,
+                groupBy: (e)=>e['Created_On'],
+                order: GroupedListOrder.DESC,
+                groupSeparatorBuilder: (String i)=>Container(),
+                itemBuilder: (context , e){
+                  return InkWell(
+                    onTap: (){
+                      print(formateToDay(e['Created_On'].toString().split(" ").first));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          e['Image']==null?
+                          Container(
+                            alignment: Alignment.center,
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[300],
+                            ),
+                            child:
+                            Icon(Icons.image_outlined , color:alertsAndColors.darkBlue,size: 35,),
+                          ):
+                          Container(
+                            alignment: Alignment.center,
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[300],
+                                image: DecorationImage(
+                                    image: NetworkImage(e['Image'].toString()),
+                                    fit: BoxFit.cover
+                                )
+                            ),
+                          ),
+                          SizedBox(width: 6,),
+                          Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  e['CustomizeCake']!=null?
+                                  Text("New Order "+e['CakeName'].toString()+" From ${e['UserName']}",style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontFamily: "Poppins",
+                                      fontSize: 13
+                                  ),):
+                                  Text("New Customize Cake Is Ordered By ${e['UserName']}. Click to view",style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontFamily: "Poppins",
+                                      fontSize: 13
+                                  ),),
+                                  SizedBox(height: 10,),
+                                  Text(
+                                    simplyFormat(time: DateTime.now(),dateOnly: true)==
+                                        e['Created_On'].toString().split(" ").first?
+                                    "Today":formateToDay(e['Created_On'].toString().split(" ").first)
+                                    ,style: TextStyle(
+                                      color: alertsAndColors.darkBlue,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold
+                                  ),),
+                                ],
+                              )
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      e['Image']==null?
-                      Container(
-                        alignment: Alignment.center,
-                        height: 60,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[300],
-                        ),
-                        child:
-                        Icon(Icons.image_outlined , color:alertsAndColors.darkBlue,size: 35,),
-                      ):
-                      Container(
-                        alignment: Alignment.center,
-                        height: 60,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[300],
-                          image: DecorationImage(
-                            image: NetworkImage(e['Image'].toString()),
-                            fit: BoxFit.cover
-                          )
-                        ),
-                      ),
-                      SizedBox(width: 6,),
-                      Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("New Order "+e['CakeName'].toString()+" From ${e['UserName']}",style: TextStyle(
-                                color: Colors.grey[600],
-                                fontFamily: "Poppins",
-                                fontSize: 13
-                              ),),
-                              SizedBox(height: 10,),
-                              Text(
-                                simplyFormat(time: DateTime.now(),dateOnly: true)==
-                                    e['Created_On'].toString().split(" ").first?
-                                "Today":formateToDay(e['Created_On'].toString().split(" ").first)
-                               ,style: TextStyle(
-                                color: alertsAndColors.darkBlue,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold
-                              ),),
-                            ],
-                          )
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
-          ):
-          Container(
-            height: MediaQuery.of(context).size.height*0.9,
-            width: double.infinity,
-            child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.not_interested_rounded, size: 40,color: Colors.red,) ,
-                  SizedBox(height: 15,),
-                  Text("No Orders Found",style: TextStyle(
-                      color: alertsAndColors.lightPink,
-                      fontFamily: "Poppins",
-                      fontSize: 18
-                  ),)
-                ],
-             ),
+            ):
+            // Column(
+            //   children:newOrders.map((e){
+            //     return InkWell(
+            //       onTap: (){
+            //         print(formateToDay(e['Created_On'].toString().split(" ").first));
+            //       },
+            //       child: Container(
+            //         padding: EdgeInsets.all(15),
+            //         child: Row(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             e['Image']==null?
+            //             Container(
+            //               alignment: Alignment.center,
+            //               height: 60,
+            //               width: 60,
+            //               decoration: BoxDecoration(
+            //                 shape: BoxShape.circle,
+            //                 color: Colors.grey[300],
+            //               ),
+            //               child:
+            //               Icon(Icons.image_outlined , color:alertsAndColors.darkBlue,size: 35,),
+            //             ):
+            //             Container(
+            //               alignment: Alignment.center,
+            //               height: 60,
+            //               width: 60,
+            //               decoration: BoxDecoration(
+            //                   shape: BoxShape.circle,
+            //                   color: Colors.grey[300],
+            //                   image: DecorationImage(
+            //                       image: NetworkImage(e['Image'].toString()),
+            //                       fit: BoxFit.cover
+            //                   )
+            //               ),
+            //             ),
+            //             SizedBox(width: 6,),
+            //             Expanded(
+            //                 child: Column(
+            //                   crossAxisAlignment: CrossAxisAlignment.start,
+            //                   children: [
+            //                     Text("New Order "+e['CakeName'].toString()+" From ${e['UserName']}",style: TextStyle(
+            //                         color: Colors.grey[600],
+            //                         fontFamily: "Poppins",
+            //                         fontSize: 13
+            //                     ),),
+            //                     SizedBox(height: 10,),
+            //                     Text(
+            //                       simplyFormat(time: DateTime.now(),dateOnly: true)==
+            //                           e['Created_On'].toString().split(" ").first?
+            //                       "Today":formateToDay(e['Created_On'].toString().split(" ").first)
+            //                       ,style: TextStyle(
+            //                         color: alertsAndColors.darkBlue,
+            //                         fontSize: 15,
+            //                         fontWeight: FontWeight.bold
+            //                     ),),
+            //                   ],
+            //                 )
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     );
+            //   }).toList(),
+            // )
+            Container(
+              height: MediaQuery.of(context).size.height*0.9,
+              width: double.infinity,
+              child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.notifications_off_outlined, size: 40,color: Colors.red,) ,
+                    SizedBox(height: 15,),
+                    Text("No Notifications",style: TextStyle(
+                        color: alertsAndColors.lightPink,
+                        fontFamily: "Poppins",
+                        fontSize: 18
+                    ),)
+                  ],
+               ),
+            ),
           ),
         )
       ),
@@ -328,3 +440,4 @@ String formateToDay(String date){
 
   return formatedDate;
 }
+
