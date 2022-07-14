@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cakey_vendor/ContextClass.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../CommonClass/AlertsAndColors.dart';
@@ -414,7 +416,18 @@ class _EditCakeState extends State<EditCake> {
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
+
         var map = jsonDecode(await response.stream.bytesToString());
+
+        print(map);
+
+        if(map["message"].toString().toLowerCase()=="updated successfully"){
+          context.read<ContextClass>().setCakeUpdated(true);
+          context.read<ContextClass>().setCakePrice(cakePrice.text.toString());
+          context.read<ContextClass>().setFlavour(fixedFlavList);
+          context.read<ContextClass>().setShape(fixedShapeList);
+          context.read<ContextClass>().setWeight(fixedWeightList);
+        }
 
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -423,6 +436,8 @@ class _EditCakeState extends State<EditCake> {
               backgroundColor: Colors.green,
             )
         );
+
+
 
         Navigator.pop(context);
       }

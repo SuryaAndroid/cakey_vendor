@@ -5,8 +5,11 @@ import 'package:cakey_vendor/Drawer/CakeDetails.dart';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
+import '../ContextClass.dart';
 
 class CakesList extends StatefulWidget {
   const CakesList({Key? key}) : super(key: key);
@@ -275,7 +278,6 @@ class _CakesListState extends State<CakesList> {
 
   @override
   Widget build(BuildContext context) {
-
     if(filteredCakeType == "all cakes"){
       filteredCakeList = cakeList;
     }else{

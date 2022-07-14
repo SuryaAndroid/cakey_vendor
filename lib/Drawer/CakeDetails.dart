@@ -94,8 +94,11 @@ class _CakeDetailsState extends State<CakeDetails>{
 
   @override
   Widget build(BuildContext context) {
-    if(context.read<ContextClass>().getCakeUpdate()==true){
-      cakePrice = context.read<ContextClass>().getCakePrice();
+    if(context.watch<ContextClass>().getCakeUpdate()==true){
+      cakePrice = context.watch<ContextClass>().getCakePrice();
+      flavours = context.watch<ContextClass>().getFlavour();
+      shapes = context.watch<ContextClass>().getShape();
+      weights = context.watch<ContextClass>().getWeigth();
     }
     return WillPopScope(
       onWillPop: () async{
