@@ -240,6 +240,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       }else{
                         loginUser();
+                        // Navigator.push(context, MaterialPageRoute(builder:(context)=>HomeScreen()));
+
                       }
 
                     },

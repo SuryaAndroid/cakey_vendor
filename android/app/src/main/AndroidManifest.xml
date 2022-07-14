@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cakey_vendor">
     <uses-permission android:name="android.permission.INTERNET"/>
-   <application
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
         android:label="cakey_vendor"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

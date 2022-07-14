@@ -1,12 +1,8 @@
-import 'dart:async';
-import 'dart:convert';
+import 'package:cakey_vendor/Drawer/HomeScreen.dart';
 import 'package:cakey_vendor/Screens/LoginScreen.dart';
-import 'package:cakey_vendor/Screens/NotificationScreen.dart';
-import 'package:cakey_vendor/Screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'ContextClass.dart';
 
 void main(){
@@ -21,58 +17,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<MainScreen> {
-
-  late Timer timer;
-  String authToken = "";
-
-  Future<void> updateLogSession() async{
-    var pr = await SharedPreferences.getInstance();
-    setState((){
-      authToken = pr.getString("authToken")??"";
-    });
-    var headers = {
-      'Content-Type': 'application/json'
-    };
-    var request = http.Request('PUT', Uri.parse('https://cakey-database.vercel.app/api/lastseen'));
-    request.body = json.encode({
-      "token": "$authToken",
-      "LastLogout_At ": simplyFormat(time:DateTime.now() , dateOnly: false)
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-    }
-    else {
-      print(response.reasonPhrase);
-    }
-
-  }
-
-  @override
-  void initState(){
-    timer = Timer.periodic(Duration(seconds: 60), (timer) {
-      updateLogSession();
-      print(simplyFormat(time:DateTime.now() , dateOnly: false));
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose(){
-    timer.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ContextClass>(
       create: (context)=>ContextClass(),
       child: MaterialApp(
+          // theme: ThemeData.dark(),
           debugShowCheckedModeBanner: false,
-          home:SplashScreen()
+          home:LoginScreen()
+        // home:TestScreen()
       ),
     );
   }
