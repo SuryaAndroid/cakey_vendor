@@ -1,21 +1,42 @@
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
+import 'package:cakey_vendor/Drawer/AddCakes.dart';
+import 'package:cakey_vendor/Drawer/CakesList.dart';
+import 'package:cakey_vendor/Drawer/HomeScreen.dart';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Screens/ProfileScreen.dart';
 
 class MainDrawer extends StatefulWidget {
-  const MainDrawer({Key? key}) : super(key: key);
+  String screen;
+  MainDrawer({required this.screen});
 
   @override
-  State<MainDrawer> createState() => _MainDrawerState();
+  State<MainDrawer> createState() => _MainDrawerState(screen: screen);
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+  String screen;
+  _MainDrawerState({required this.screen});
 
-  String screenName = "";
+  String profileImage = "";
+  String vendorName = "";
+
+
+  Future<void> getPrefs() async{
+    var pref = await SharedPreferences.getInstance();
+    setState((){
+      profileImage = pref.getString("profileImage")??"";
+      vendorName = pref.getString("vendorName")??"";
+    });
+  }
 
   @override
   void initState(){
     super.initState();
     print("Inist draw");
+    getPrefs();
   }
 
   @override
@@ -45,16 +66,17 @@ class _MainDrawerState extends State<MainDrawer> {
                       boxShadow: [BoxShadow(blurRadius: 12, color: Color(0xffcccccc), spreadRadius: 1)],
                     ),
                     child:
-                    // profileUrl!="null"?
-                    // CircleAvatar(
-                    //   radius: 37,
-                    //   backgroundColor: Colors.white,
-                    //   child: CircleAvatar(
-                    //     radius: 35,
-                    //     backgroundImage:
-                    //     NetworkImage('$profileUrl'),
-                    //   ),
-                    // ):
+                    profileImage!="null"?
+                    CircleAvatar(
+                      radius: 37,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 35,
+                        backgroundImage:
+                        NetworkImage('$profileImage'),
+                      ),
+                    ):
+
                     CircleAvatar(
                       radius: 37,
                       backgroundColor: Colors.white,
@@ -71,7 +93,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   children: [
                     Container(
                       width: 180,
-                      child: Text("Username",
+                      child: Text("$vendorName",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(color: AlertsAndColors().darkBlue,fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15),
                       ),
@@ -85,9 +107,10 @@ class _MainDrawerState extends State<MainDrawer> {
                             borderRadius: BorderRadius.circular(25)
                         ),
                         color:AlertsAndColors().lightPink,
-                        onPressed: (){
-
-                        },
+                        onPressed: ()=>Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (c)=>ProfileScreen())
+                        ),
                         child: Text('PROFILE',
                           style: TextStyle(color:Colors.white,fontFamily: "Poppins",fontSize: 13),
                         ),
@@ -105,11 +128,14 @@ class _MainDrawerState extends State<MainDrawer> {
             SizedBox(height: 25,),
             ListTile(
               onTap: (){
-
-                if(screenName == "home"){
+                if(screen == "home"){
                   Navigator.pop(context);
                 }else {
                   Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c)=>HomeScreen())
+                  );
                 }
               },
               leading: CircleAvatar(
@@ -127,11 +153,10 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
             ListTile(
               onTap: (){
-                if(screenName == "ctype"){
+                if(screen == "orderlist"){
                   Navigator.pop(context);
                 }else {
                   Navigator.pop(context);
-
                 }
               },
               leading: CircleAvatar(
@@ -149,10 +174,14 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
             ListTile(
               onTap: (){
-                if(screenName == "custom"){
+                if(screen == "cakes"){
                   Navigator.pop(context);
                 }else {
                   Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c)=>CakesList())
+                  );
                 }
               },
               leading: CircleAvatar(
@@ -169,10 +198,14 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
             ListTile(
               onTap: (){
-                if(screenName == "vendor"){
+                if(screen == "addcake"){
                   Navigator.pop(context);
                 }else {
                   Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c)=>AddCakes())
+                  );
                 }
               },
               leading: CircleAvatar(
@@ -207,7 +240,11 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
             ListTile(
               onTap: (){
-
+                Navigator.pop(context);
+                Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context)=>NotificationScreen())
+                );
               },
               leading: CircleAvatar(
                 radius: 18,

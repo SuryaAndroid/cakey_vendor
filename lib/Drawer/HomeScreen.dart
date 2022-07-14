@@ -1,28 +1,114 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:cakey_vendor/Drawer/AddCakes.dart';
 import 'package:cakey_vendor/Drawer/CakesList.dart';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
 import 'package:cakey_vendor/Screens/NotificationScreen.dart';
 import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../CommonClass/AlertsAndColors.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   //alert and color
   AlertsAndColors alertsAndColors = new AlertsAndColors();
   var drawerKey = GlobalKey<ScaffoldState>();
+  String authToken = "";
+  String authMail = "";
+  String profileUrl = "";
+  String vendorName = "";
+  List vendorProfile = [];
+
+  @override
+  void initState(){
+    super.initState();
+    getInitialPrefs();
+  }
+
+  Future<void> getInitialPrefs() async{
+    var pref = await SharedPreferences.getInstance();
+    setState((){
+      authToken = pref.getString('authToken')??"";
+      authMail = pref.getString('authMail')??"";
+    });
+    getVendorByMail(authMail);
+  }
+
+  Future<void> getVendorByMail(String authMail) async{
+    var pref = await SharedPreferences.getInstance();
+    alertsAndColors.showLoader(context);
+    try{
+      var headers = {
+        'Authorization': '$authToken'
+      };
+      var request = http.Request('GET',
+          Uri.parse('https://cakey-database.vercel.app/api/vendors/listbyemail/$authMail'));
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        List data = jsonDecode(await response.stream.bytesToString());
+        print(data.length);
+        setState((){
+          vendorProfile = data;
+          profileUrl = vendorProfile[0]["ProfileImage"].toString();
+          vendorName = vendorProfile[0]["VendorName"].toString();
+          pref.setString("profileImage", profileUrl);
+          pref.setString("vendorName", vendorName);
+        });
+        Navigator.pop(context);
+      }
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response.reasonPhrase.toString()),
+              backgroundColor: Colors.brown,
+              behavior: SnackBarBehavior.floating,
+            )
+        );
+        Navigator.pop(context);
+      }
+    }catch(e){
+      checkNetwork();
+      print(e);
+      Navigator.pop(context);
+    }
+
+  }
+
+  //network check
+  Future<void> checkNetwork() async{
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+      }
+    } on SocketException catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Internet Not Connected"),
+            backgroundColor: Colors.brown,
+            behavior: SnackBarBehavior.floating,
+          )
+      );
+      print('not connected');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: drawerKey,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(screen: "home",),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child:SafeArea(
@@ -159,15 +245,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                           child:
-                          // profileUrl != "null"
-                          //     ? CircleAvatar(
-                          //   radius: 14.7,
-                          //   backgroundColor: Colors.white,
-                          //   child: CircleAvatar(
-                          //       radius: 13,
-                          //       backgroundImage:
-                          //       NetworkImage("$profileUrl")),
-                          // ) :
+                          profileUrl != "null"
+                              ? CircleAvatar(
+                              radius: 14.7,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 13,
+                                backgroundImage:
+                                NetworkImage(profileUrl)),
+                          ) :
                           CircleAvatar(
                             radius: 14.7,
                             backgroundColor: Colors.white,

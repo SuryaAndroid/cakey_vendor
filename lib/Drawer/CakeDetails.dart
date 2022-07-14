@@ -59,9 +59,8 @@ class _CakeDetailsState extends State<CakeDetails>{
 
       images = pref.getStringList('cakeImages')??[];
       weights = pref.getStringList('cakeWeight')??[];
-
+      weights = weights.toSet().toList();
     });
-
   }
 
   Future<void> passDataToEdit() async{

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:cakey_vendor/Drawer/CakeDetails.dart';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../ContextClass.dart';
+import '../Screens/ProfileScreen.dart';
 
 class CakesList extends StatefulWidget {
   const CakesList({Key? key}) : super(key: key);
@@ -30,6 +32,7 @@ class _CakesListState extends State<CakesList> {
   var authToken = "";
   var filteredCakeType = "";
   bool loading = true;
+  String profileImage = "";
 
   @override
   void initState(){
@@ -45,6 +48,7 @@ class _CakesListState extends State<CakesList> {
     this.setState(() {
       authToken = prefs.getString("authToken")??"null";
       vendorMail = prefs.getString("authMail")??"null";
+      profileImage = prefs.getString("profileImage")??"null";
     });
 
     print(authToken);
@@ -108,7 +112,7 @@ class _CakesListState extends State<CakesList> {
   }
 
   Future<void> getCakes(String id) async{
-    var list = [];
+
     try{
 
       var headers = {
@@ -123,7 +127,9 @@ class _CakesListState extends State<CakesList> {
 
       if (response.statusCode == 200) {
 
-        list = jsonDecode(await response.stream.bytesToString());
+        List list = jsonDecode(await response.stream.bytesToString());
+
+        print(list);
 
         setState((){
           cakeList = list.reversed.toList();
@@ -150,7 +156,6 @@ class _CakesListState extends State<CakesList> {
           loading = false;
         });
       }
-
     }catch(e){
       checkNetwork();
       setState((){
@@ -242,10 +247,8 @@ class _CakesListState extends State<CakesList> {
     pref.setString("cakeTierPoss", filteredCakeList[i]['IsTierCakePossible']);
     pref.setString("cakeCustomPoss", filteredCakeList[i]['BasicCustomisationPossible']);
 
-
     pref.setStringList("cakeImages", shareImg);
     pref.setStringList("cakeWeight", shareWeight);
-
 
     Navigator.push(
         context,
@@ -289,7 +292,7 @@ class _CakesListState extends State<CakesList> {
 
     return Scaffold(
       key: drawerKey,
-      drawer: MainDrawer(),
+      drawer: MainDrawer(screen: "cakes",),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child:SafeArea(
@@ -372,8 +375,10 @@ class _CakesListState extends State<CakesList> {
                         alignment: Alignment.center,
                         children: [
                           InkWell(
-                            onTap: () {
-                            },
+                            onTap: ()=>Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (c)=>NotificationScreen())
+                            ),
                             child: Container(
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
@@ -415,19 +420,20 @@ class _CakesListState extends State<CakesList> {
                           ],
                         ),
                         child: InkWell(
-                          onTap: () {
-
-                          },
+                          onTap: ()=>Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (c)=>ProfileScreen())
+                          ),
                           child:
-                          // profileUrl != "null"
-                          //     ? CircleAvatar(
-                          //   radius: 14.7,
-                          //   backgroundColor: Colors.white,
-                          //   child: CircleAvatar(
-                          //       radius: 13,
-                          //       backgroundImage:
-                          //       NetworkImage("$profileUrl")),
-                          // ) :
+                          profileImage != "null"
+                              ? CircleAvatar(
+                            radius: 14.7,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                                radius: 13,
+                                backgroundImage:
+                                NetworkImage("$profileImage")),
+                          ) :
                           CircleAvatar(
                             radius: 14.7,
                             backgroundColor: Colors.white,
@@ -484,7 +490,7 @@ class _CakesListState extends State<CakesList> {
                               children: [
                                 Icon(Icons.cake_outlined , color: Colors.pink,),
                                 SizedBox(width: 10,),
-                                Text("${cakeTypes[i]}" , style: TextStyle(
+                                Text(cakeTypes[i].toString()!="null"?"${cakeTypes[i]}":"Not Approved" , style: TextStyle(
                                   color: alertsAndColors.darkBlue ,
                                   fontFamily: "Poppins"
                                 ),)

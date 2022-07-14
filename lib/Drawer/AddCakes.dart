@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
+import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,6 +47,7 @@ class _AddCakesState extends State<AddCakes> {
   String temperature = "";
   String threekgHourorMin = "Hour";
   String fvkgHourorMin = "Hour";
+  String profileImage = "";
 
   //list
   List<bool> isFlavTapped = [];
@@ -106,7 +109,6 @@ class _AddCakesState extends State<AddCakes> {
   List<File> files = [];
 
 
-
   @override
   void initState(){
     Future.delayed(Duration.zero , () async {
@@ -120,6 +122,7 @@ class _AddCakesState extends State<AddCakes> {
     setState((){
       authToken = pref.getString('authToken')??'null';
       currentVendorMail = pref.getString('authMail')??'null';
+      profileImage = pref.getString('profileImage')??'null';
     });
     print(authToken);
     getVendor();
@@ -890,7 +893,7 @@ class _AddCakesState extends State<AddCakes> {
       onWillPop: ()=>onBackPressed(),
       child: Scaffold(
         key: drawerKey,
-        drawer: MainDrawer(),
+        drawer: MainDrawer(screen: "addcake"),
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: SafeArea(
@@ -974,7 +977,10 @@ class _AddCakesState extends State<AddCakes> {
                           alignment: Alignment.center,
                           children: [
                             InkWell(
-                              onTap: () {},
+                              onTap: ()=>Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (c)=>NotificationScreen())
+                              ),
                               child: Container(
                                 padding: EdgeInsets.all(3),
                                 decoration: BoxDecoration(
@@ -1016,17 +1022,20 @@ class _AddCakesState extends State<AddCakes> {
                             ],
                           ),
                           child: InkWell(
-                            onTap: () {},
+                            onTap:()=>Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (c)=>ProfileScreen())
+                            ),
                             child:
-                                // profileUrl != "null"
-                                //     ? CircleAvatar(
-                                //   radius: 14.7,
-                                //   backgroundColor: Colors.white,
-                                //   child: CircleAvatar(
-                                //       radius: 13,
-                                //       backgroundImage:
-                                //       NetworkImage("$profileUrl")),
-                                // ) :
+                            profileImage != "null"
+                                    ? CircleAvatar(
+                                  radius: 14.7,
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(
+                                      radius: 13,
+                                      backgroundImage:
+                                      NetworkImage("$profileImage")),
+                                ) :
                                 CircleAvatar(
                               radius: 14.7,
                               backgroundColor: Colors.white,
