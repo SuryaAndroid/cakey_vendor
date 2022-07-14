@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
       var request = http.Request('POST', Uri.parse('https://cakey-database.vercel.app/api/login/validate'));
 
       request.body = json.encode({
-        "Email": email.text.toString().trim(),
+        "Email": email.text.toString().toLowerCase().trim(),
         "Password": password.text.toString().trim()
       });
 
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           prefs.setBool("currentUser" , true);
           prefs.setString("authToken" , map["token"]);
-          prefs.setString("authMail" , email.text.trim());
+          prefs.setString("authMail" , email.text.toLowerCase().trim());
 
           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=>HomeScreen()));
 

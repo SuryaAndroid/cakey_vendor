@@ -1,6 +1,8 @@
 import 'package:cakey_vendor/Drawer/AddCakes.dart';
 import 'package:cakey_vendor/Drawer/CakesList.dart';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
+import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import '../CommonClass/AlertsAndColors.dart';
 
@@ -104,7 +106,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-
+                              Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (c)=>NotificationScreen())
+                              );
                             },
                             child: Container(
                               padding: EdgeInsets.all(3),
@@ -148,7 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: InkWell(
                           onTap: () {
-
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (c)=>ProfileScreen())
+                            );
                           },
                           child:
                           // profileUrl != "null"

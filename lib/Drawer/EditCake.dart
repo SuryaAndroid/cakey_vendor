@@ -43,7 +43,7 @@ class _EditCakeState extends State<EditCake> {
   String cakeId = "";
   String cakeCustomPossible = "";
   String cakeTierPoss = "";
-  String stocks = "Instock";
+  String stocks = "InStock";
   String tierPoss = "No";
   String basicCus = "No";
   String threekgHourorMin = "Hour";
@@ -393,7 +393,6 @@ class _EditCakeState extends State<EditCake> {
         'State': currentVendorState,
         'Pincode': currentVendorPin,
         'Stock': stocks,
-        'OldSampleImages': '[""]',
         'VendorID': currentVendor_id,
         'BasicCustomisationPossible': basicCus.toLowerCase()=="yes"?'y':'n',
         'BasicCakePrice': cakePrice.text.toString()
@@ -701,11 +700,11 @@ class _EditCakeState extends State<EditCake> {
                           underline: Container(),
                           items: <DropdownMenuItem<String>>[
                             DropdownMenuItem(
-                                value: "Instock",
+                                value: "InStock",
                                 child: Text("Instock")
                             ),
                             DropdownMenuItem(
-                                value: "Out of stock",
+                                value: "OutOfStock",
                                 child: Text("Out of stock")
                             ),
                           ],

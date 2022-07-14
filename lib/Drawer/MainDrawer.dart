@@ -110,10 +110,10 @@ class _MainDrawerState extends State<MainDrawer> {
                   Navigator.pop(context);
                 }else {
                   Navigator.pop(context);
-
                 }
               },
               leading: CircleAvatar(
+                radius: 18,
                 backgroundColor: Colors.red[50],
                 // child: Icon(Icons.home_outlined,color:AlertsAndColors().lightPink,),
               ),
@@ -135,6 +135,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 }
               },
               leading: CircleAvatar(
+                radius: 18,
                 backgroundColor: Colors.red[50],
                 // child: Icon(Icons.cake_outlined,color:AlertsAndColors().lightPink,),
               ),
@@ -155,6 +156,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 }
               },
               leading: CircleAvatar(
+                radius: 18,
                 backgroundColor: Colors.red[50],
                 // child: Icon(Icons.edit_outlined,color:AlertsAndColors().lightPink,),
               ),
@@ -174,6 +176,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 }
               },
               leading: CircleAvatar(
+                radius: 18,
                 backgroundColor: Colors.red[50],
                 // child: Icon(Icons.account_circle_outlined,color:AlertsAndColors().lightPink,),
               ),
@@ -190,6 +193,7 @@ class _MainDrawerState extends State<MainDrawer> {
 
               },
               leading: CircleAvatar(
+                radius: 18,
                 backgroundColor: Colors.red[50],
                 // child: Icon(Icons.shopping_bag_outlined,color:AlertsAndColors().lightPink,),
               ),
@@ -206,6 +210,7 @@ class _MainDrawerState extends State<MainDrawer> {
 
               },
               leading: CircleAvatar(
+                radius: 18,
                 backgroundColor: Colors.red[50],
                 // child: Icon(Icons.notifications_outlined,color:AlertsAndColors().lightPink,),
               ),

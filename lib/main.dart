@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cakey_vendor/Drawer/HomeScreen.dart';
 import 'package:cakey_vendor/Screens/LoginScreen.dart';
 import 'package:flutter/material.dart';
@@ -17,15 +19,30 @@ class MainScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<MainScreen> {
+
+  late Timer timer;
+
+  // @override
+  // void initState(){
+  //   timer = Timer.periodic(Duration(seconds: 5), (timer) {
+  //     print("iam from 5 seconds");
+  //   });
+  //   super.initState();
+  // }
+  //
+  // @override
+  // void dispose(){
+  //   timer.cancel();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ContextClass>(
       create: (context)=>ContextClass(),
       child: MaterialApp(
-          // theme: ThemeData.dark(),
           debugShowCheckedModeBanner: false,
           home:LoginScreen()
-        // home:TestScreen()
       ),
     );
   }

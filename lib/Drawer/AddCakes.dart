@@ -503,48 +503,7 @@ class _AddCakesState extends State<AddCakes> {
   Future<void> addCake() async{
     alertsAndColors.showLoader(context);
 
-    // List tempFlav = [];
-    // List tempShape = [];
-    // List tempWeight = [];
-    //
-    // List tempTier = [];
-    // List tempTierTime = [];
-    //
-    // fixedMinTimeTires.removeWhere((element) => element=="value");
-    //
-    // print(fixedMinTimeTires);
-    //
-    // if(fixedFlavList.isNotEmpty){
-    //   for(int i =0; i<fixedFlavList.length;i++){
-    //     tempFlav.add(jsonEncode(fixedFlavList[i]));
-    //   }
-    // }
-    //
-    // if(fixedShapeList.isNotEmpty){
-    //   for(int i =0; i<fixedShapeList.length;i++){
-    //     tempShape.add(jsonEncode(fixedShapeList[i]));
-    //   }
-    // }
-    //
-    // if(fixedWeightList.isNotEmpty){
-    //   for(int i =0; i<fixedWeightList.length;i++){
-    //     tempWeight.add(jsonEncode(fixedWeightList[i]));
-    //   }
-    // }
-    //
-    // if(fixedTierList.isNotEmpty){
-    //   for(int i =0; i<fixedTierList.length;i++){
-    //     tempTier.add(jsonEncode(fixedTierList[i]));
-    //   }
-    // }
-    //
-    // if(fixedMinTimeTires.isNotEmpty){
-    //   for(int i =0; i<fixedMinTimeTires.length;i++){
-    //     tempTierTime.add(jsonEncode(fixedMinTimeTires[i]));
-    //   }
-    // }
-    //
-    // print(tempTier);
+
 
     print({
       'CakeName': cakeName.text,

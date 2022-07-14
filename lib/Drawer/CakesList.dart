@@ -163,6 +163,8 @@ class _CakesListState extends State<CakesList> {
 
   Future<void> passDetails(int i) async{
 
+    print("IDDDD ${filteredCakeList[i]["Id"]}");
+
     var pref = await SharedPreferences.getInstance();
 
     //img
