@@ -2,7 +2,9 @@ import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:cakey_vendor/Drawer/AddCakes.dart';
 import 'package:cakey_vendor/Drawer/CakesList.dart';
 import 'package:cakey_vendor/Drawer/HomeScreen.dart';
+import 'package:cakey_vendor/Screens/CustomizeList.dart';
 import 'package:cakey_vendor/Screens/NotificationScreen.dart';
+import 'package:cakey_vendor/Screens/OrderList.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -157,6 +159,10 @@ class _MainDrawerState extends State<MainDrawer> {
                   Navigator.pop(context);
                 }else {
                   Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c)=>OrderListScreen())
+                  );
                 }
               },
               leading: CircleAvatar(
@@ -223,7 +229,10 @@ class _MainDrawerState extends State<MainDrawer> {
             ),
             ListTile(
               onTap: (){
-
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (c)=>CustomizeList())
+                );
               },
               leading: CircleAvatar(
                 radius: 18,

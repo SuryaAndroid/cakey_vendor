@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
 import 'package:cakey_vendor/Screens/OrderDetails.dart';
+import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../CommonClass/AlertsAndColors.dart';
@@ -35,6 +37,7 @@ String currentVendorPhn2 = "";
 String currentVendor_id = "";
 String currentVendorId = "";
 String authToken='';
+String profileUrl = "";
 var vendorId;
 bool loading = true;
 
@@ -62,6 +65,7 @@ bool loading = true;
 
         setState((){
           vendorId = list[0]['_id'];
+          profileUrl = list[0]['ProfileImage'];
         });
 
         getOrderList(vendorId);
@@ -426,7 +430,10 @@ void initState() {
                           children: [
                             InkWell(
                               onTap: () {
-
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context)=>NotificationScreen())
+                                );
                               },
                               child: Container(
                                 padding: EdgeInsets.all(3),
@@ -470,18 +477,21 @@ void initState() {
                           ),
                           child: InkWell(
                             onTap: () {
-
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)=>ProfileScreen())
+                              );
                             },
                             child:
-                            // profileUrl != "null"
-                            //     ? CircleAvatar(
-                            //   radius: 14.7,
-                            //   backgroundColor: Colors.white,
-                            //   child: CircleAvatar(
-                            //       radius: 13,
-                            //       backgroundImage:
-                            //       NetworkImage("$profileUrl")),
-                            // ) :
+                            profileUrl != "null"
+                                ? CircleAvatar(
+                              radius: 14.7,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                  radius: 13,
+                                  backgroundImage:
+                                  NetworkImage("$profileUrl")),
+                            ) :
                             CircleAvatar(
                               radius: 14.7,
                               backgroundColor: Colors.white,
@@ -520,7 +530,6 @@ void initState() {
                             children: [
                              GestureDetector(
                               onTap: (){
-
                                 (OrdersList[index]['CustomizeCake']=='n')?  passDetails(index):passDetailsCus(index);
                               },
                               child: Container(
@@ -644,7 +653,7 @@ void initState() {
                                   ),
                                 ),
                               ),
-                            ),
+                             ),
                               Positioned(
                                   left: 10,
                                   top: 15,

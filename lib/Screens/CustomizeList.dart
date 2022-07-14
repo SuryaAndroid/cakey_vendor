@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cakey_vendor/Drawer/MainDrawer.dart';
 import 'package:cakey_vendor/Screens/CustomizeDetails.dart';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
+import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../CommonClass/AlertsAndColors.dart';
@@ -33,6 +35,7 @@ class _CustomizeListState extends State<CustomizeList> {
   String currentVendor_id = "";
   String currentVendorId = "";
   String authToken='';
+  String profileUrl = "";
   var vendorId;
   bool loading = true;
   var drawerKey = GlobalKey<ScaffoldState>();
@@ -61,6 +64,7 @@ class _CustomizeListState extends State<CustomizeList> {
 
         setState((){
           vendorId = list[0]['_id'];
+          profileUrl = list[0]['ProfileImage'];
         });
 
         getCustomizeList(vendorId);
@@ -322,7 +326,10 @@ class _CustomizeListState extends State<CustomizeList> {
                         children: [
                           InkWell(
                             onTap: () {
-
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)=>NotificationScreen())
+                              );
                             },
                             child: Container(
                               padding: EdgeInsets.all(3),
@@ -366,18 +373,21 @@ class _CustomizeListState extends State<CustomizeList> {
                         ),
                         child: InkWell(
                           onTap: () {
-
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>ProfileScreen())
+                            );
                           },
                           child:
-                          // profileUrl != "null"
-                          //     ? CircleAvatar(
-                          //   radius: 14.7,
-                          //   backgroundColor: Colors.white,
-                          //   child: CircleAvatar(
-                          //       radius: 13,
-                          //       backgroundImage:
-                          //       NetworkImage("$profileUrl")),
-                          // ) :
+                          profileUrl != "null"
+                              ? CircleAvatar(
+                            radius: 14.7,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                                radius: 13,
+                                backgroundImage:
+                                NetworkImage("$profileUrl")),
+                          ) :
                           CircleAvatar(
                             radius: 14.7,
                             backgroundColor: Colors.white,
