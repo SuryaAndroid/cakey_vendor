@@ -41,6 +41,17 @@ String profileUrl = "";
 var vendorId;
 bool loading = true;
 
+Future<void> getIntitalpref()async{
+  var pref = await SharedPreferences.getInstance();
+  setState((){
+    authToken = pref.getString('authToken')??'null';
+    currentVendorMail = pref.getString('authMail')??'null';
+  });
+  print(authToken);
+  print(currentVendor_id);
+  getVendors();
+}
+
 //vendor details
   Future<void> getVendors() async{
 
@@ -330,14 +341,7 @@ Future<void> checkNetwork() async{
 void initState() {
   // TODO: implement initState
   Future.delayed(Duration.zero , () async{
-  var pref = await SharedPreferences.getInstance();
-  setState((){
-    authToken = pref.getString('authToken')??'null';
-    currentVendorMail = pref.getString('authMail')??'null';
-  });
-  print(authToken);
-  print(currentVendor_id);
-  getVendors();
+    getIntitalpref();
   });
   super.initState();
 }
@@ -509,232 +513,234 @@ void initState() {
               ),
             )
         ),
-        body:SingleChildScrollView(
-        child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 15,top: 10,bottom: 10),
-                  child: Text('JULY 9th 2022',style: TextStyle(fontSize: 18,color: alertsAndColors.darkBlue,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
-                ),
-                Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: ListView.builder(
-                        itemCount: OrdersList.length,
-                        shrinkWrap: true,
-                        reverse: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context,index){
-                          return Stack(
-                            children: [
-                             GestureDetector(
-                              onTap: (){
-                                (OrdersList[index]['CustomizeCake']=='n')?  passDetails(index):passDetailsCus(index);
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(horizontal: 15,vertical: 6),
-                                            decoration: BoxDecoration(
-                                                border: Border.all(color: Color(0Xffd4d4d4)),
-                                                borderRadius: BorderRadius.circular(10)
-                                            ),
+        body:RefreshIndicator(
+            onRefresh: () async{
+              getIntitalpref();
+            },
+        child: SingleChildScrollView(
+          child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 15,top: 10,bottom: 10),
+                    child: Text('JULY 9th 2022',style: TextStyle(fontSize: 18,color: alertsAndColors.darkBlue,fontWeight: FontWeight.bold,fontFamily: "Poppins"),),
+                  ),
+                  Container(
+                      padding: EdgeInsets.only(bottom: 5),
+                      child: ListView.builder(
+                          itemCount: OrdersList.length,
+                          shrinkWrap: true,
+                          reverse: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context,index){
+                            return Stack(
+                              children: [
+                               GestureDetector(
+                                onTap: (){
+                                  (OrdersList[index]['CustomizeCake']=='n')?  passDetails(index):passDetailsCus(index);
+                                },
                                 child: Container(
-                                  padding: EdgeInsets.all(8),
-                                  height: 135,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15)
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: 120,
-                                        width: 85,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(15),
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: OrdersList[index]['Image']==null?
-                                                NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkp-kR6zRZP6qPx7e-Uvy6lDvv05Ud6TT2Yw&usqp=CAU')
-                                                    :NetworkImage(OrdersList[index]['Image'])
-                                            )
+                                  margin: EdgeInsets.symmetric(horizontal: 15,vertical: 6),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: Color(0Xffd4d4d4)),
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                  child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    height: 135,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: 120,
+                                          width: 85,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: OrdersList[index]['Image']==null?
+                                                  NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkp-kR6zRZP6qPx7e-Uvy6lDvv05Ud6TT2Yw&usqp=CAU')
+                                                      :NetworkImage(OrdersList[index]['Image'])
+                                              )
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 4),
-                                      Expanded(
-                                        child: Container(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Container(
+                                        SizedBox(width: 4),
+                                        Expanded(
+                                          child: Container(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              children: [
+                                               Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text('ID : ' +OrdersList[index]['Id'],style: TextStyle(fontSize: 10,fontFamily: "Poppins"),),
+                                                       Row(
+                                                          children: [
+                                                            CircleAvatar(
+                                                              backgroundColor: Colors.brown,
+                                                              radius: 8,
+                                                              child: CircleAvatar(
+                                                                  radius: 6,
+                                                                  backgroundColor: Colors.white,
+
+                                                                  child: Icon(Icons.person,size: 12,color: Colors.brown,)
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 2,),
+                                                            Container(
+                                                                child: Text(OrdersList[index]['UserName']==null?'UserName'
+                                                                  :OrdersList[index]['UserName'].toString().split(' ').first,style: TextStyle(fontSize: 10,  fontFamily: "Poppins"),)
+                                                            )
+                                                          ],
+                                                        ),
+
+                                                    ],
+                                                  ),
+
+                                                Container(
+                                                    margin: EdgeInsets.symmetric(vertical: 2),
+                                                    child: Text(OrdersList[index]['CakeName']==null?'Cutomized Cake':
+                                                     OrdersList[index]['CakeName'],style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,fontFamily: "Poppins"),)
+                                                ),
+                                                Container(
+                                                  height: 0.7,
+                                                  margin: EdgeInsets.symmetric(vertical: 5),
+                                                  // width: width*0.63,
+                                                  color: Colors.orange[100],
+                                                ),
+                                                Expanded(
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                        Text('ID : ' +OrdersList[index]['Id'],style: TextStyle(fontSize: 10,fontFamily: "Poppins"),),
-                                                    SizedBox(width: 73,),
-                                                    Expanded(
-                                                      child: Row(
-                                                        children: [
-                                                          CircleAvatar(
-                                                            backgroundColor: Colors.brown,
-                                                            radius: 8,
-                                                            child: CircleAvatar(
-                                                                radius: 6,
-                                                                backgroundColor: Colors.white,
-
-                                                                child: Icon(Icons.person,size: 12,color: Colors.brown,)
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Icon(Icons.calendar_today_outlined,size: 12,color: Colors.black54),
+                                                            Container(
+                                                                child: Text('Order date',style: TextStyle(fontSize: 10,color: Colors.black54,fontFamily: "Poppins"),)
                                                             ),
-                                                          ),
-                                                          SizedBox(width: 2,),
-                                                          Container(
-                                                              child: Text(OrdersList[index]['UserName']==null?'UserName'
-                                                                :OrdersList[index]['UserName'].toString().split(' ').first,style: TextStyle(fontSize: 10,  fontFamily: "Poppins"),)
-                                                          )
-                                                        ],
-                                                      ),
+                                                          ],
+                                                        ),
+                                                        Text(OrdersList[index]['Created_On']==null?'Date not specified'
+                                                            :OrdersList[index]['Created_On'],style: TextStyle(fontSize: 12,fontFamily: "Poppins"),)
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Icon(Icons.calendar_today_outlined,size: 12,color: Colors.black54),
+                                                            Container(
+                                                                child: Text('Delivery',style: TextStyle(fontSize: 10,color: Colors.black54,fontFamily: "Poppins"),)
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Text(OrdersList[index]['DeliveryDate']==null?'Date not specified'
+                                                          :OrdersList[index]['DeliveryDate'],style: TextStyle(fontSize: 12,fontFamily: "Poppins"),)
+                                                      ],
                                                     )
                                                   ],
                                                 ),
-                                              ),
-                                              Container(
-                                                  margin: EdgeInsets.symmetric(vertical: 2),
-                                                  child: Text(OrdersList[index]['CakeName']==null?'Cutomized Cake':
-                                                   OrdersList[index]['CakeName'],style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,fontFamily: "Poppins"),)
-                                              ),
-                                              Container(
-                                                height: 0.7,
-                                                margin: EdgeInsets.symmetric(vertical: 5),
-                                                // width: width*0.63,
-                                                color: Colors.orange[100],
-                                              ),
-                                              Expanded(
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          Icon(Icons.calendar_today_outlined,size: 12,color: Colors.black54),
-                                                          Container(
-                                                              child: Text('Order date',style: TextStyle(fontSize: 10,color: Colors.black54,fontFamily: "Poppins"),)
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Text(OrdersList[index]['Created_On']==null?'Date not specified'
-                                                          :OrdersList[index]['Created_On'],style: TextStyle(fontSize: 12,fontFamily: "Poppins"),)
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          Icon(Icons.calendar_today_outlined,size: 12,color: Colors.black54),
-                                                          Container(
-                                                              child: Text('Delivery',style: TextStyle(fontSize: 10,color: Colors.black54,fontFamily: "Poppins"),)
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Text(OrdersList[index]['DeliveryDate']==null?'Date not specified'
-                                                        :OrdersList[index]['DeliveryDate'],style: TextStyle(fontSize: 12,fontFamily: "Poppins"),)
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                            ],
+                                              )
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                             ),
-                              Positioned(
-                                  left: 10,
-                                  top: 15,
-                                  child:OrdersList[index]['Status']=='New'? Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                                    decoration: BoxDecoration(
-                                      color: alertsAndColors.lightPink,
-                                        borderRadius: new BorderRadius.only(
-                                            topRight:  const  Radius.circular(30.0),
-                                            bottomRight: const  Radius.circular(30.0)
-                                        )
-                                    ),
-                                    child: Text('New',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                                  )
-                                      :OrdersList[index]['Status']=='Preparing'?
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                                    decoration: BoxDecoration(
-                                        color:Color(0XFF6b55bd),
-                                        borderRadius: new BorderRadius.only(
-                                            topRight:  const  Radius.circular(30.0),
-                                            bottomRight: const  Radius.circular(30.0)
-                                        )
-                                    ),
-                                    child: Text('Preparing',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                                  ):OrdersList[index]['Status']=='Delivered'?
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                                decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: new BorderRadius.only(
-                                        topRight:  const  Radius.circular(30.0),
-                                        bottomRight: const  Radius.circular(30.0)
+                               ),
+                                Positioned(
+                                    left: 10,
+                                    top: 15,
+                                    child:OrdersList[index]['Status']=='New'? Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                                      decoration: BoxDecoration(
+                                        color: alertsAndColors.lightPink,
+                                          borderRadius: new BorderRadius.only(
+                                              topRight:  const  Radius.circular(30.0),
+                                              bottomRight: const  Radius.circular(30.0)
+                                          )
+                                      ),
+                                      child: Text('New',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
                                     )
+                                        :OrdersList[index]['Status']=='Preparing'?
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                                      decoration: BoxDecoration(
+                                          color:Color(0XFF6b55bd),
+                                          borderRadius: new BorderRadius.only(
+                                              topRight:  const  Radius.circular(30.0),
+                                              bottomRight: const  Radius.circular(30.0)
+                                          )
+                                      ),
+                                      child: Text('Preparing',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                                    ):OrdersList[index]['Status']=='Delivered'?
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                                  decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: new BorderRadius.only(
+                                          topRight:  const  Radius.circular(30.0),
+                                          bottomRight: const  Radius.circular(30.0)
+                                      )
+                                  ),
+                                  child: Text('Delivered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                                ):OrdersList[index]['Status']=='Cancelled'?
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius: new BorderRadius.only(
+                                              topRight:  const  Radius.circular(30.0),
+                                              bottomRight: const  Radius.circular(30.0)
+                                          )
+                                      ),
+                                      child: Text('Cancelled',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                                    ):OrdersList[index]['Status']=='Assigned'?
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                                      decoration: BoxDecoration(
+                                          color: Colors.lightBlue,
+                                          borderRadius: new BorderRadius.only(
+                                              topRight:  const  Radius.circular(30.0),
+                                              bottomRight: const  Radius.circular(30.0)
+                                          )
+                                      ),
+                                      child: Text('Assigned',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                                    ):Container()
                                 ),
-                                child: Text('Delivered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                              ):OrdersList[index]['Status']=='Cancelled'?
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                                    decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: new BorderRadius.only(
-                                            topRight:  const  Radius.circular(30.0),
-                                            bottomRight: const  Radius.circular(30.0)
-                                        )
-                                    ),
-                                    child: Text('Cancelled',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                                  ):OrdersList[index]['Status']=='Assigned'?
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                                    decoration: BoxDecoration(
-                                        color: Colors.lightBlue,
-                                        borderRadius: new BorderRadius.only(
-                                            topRight:  const  Radius.circular(30.0),
-                                            bottomRight: const  Radius.circular(30.0)
-                                        )
-                                    ),
-                                    child: Text('Assigned',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                                  ):Container()
-                              ),
-                              Positioned(
-                                  left: 10,
-                                  top: 35,
-                                  child: Container(
-                                    width: 6,
-                                    height: 6,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                        borderRadius: new BorderRadius.only(
-                                            bottomLeft:  const  Radius.circular(100.0),
-                                        )
-                                    ),
-                                  ))
-                            ],
-                          );
-                        }
+                                Positioned(
+                                    left: 10,
+                                    top: 35,
+                                    child: Container(
+                                      width: 6,
+                                      height: 6,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                          borderRadius: new BorderRadius.only(
+                                              bottomLeft:  const  Radius.circular(100.0),
+                                          )
+                                      ),
+                                    ))
+                              ],
+                            );
+                          }
+                      ),
                     ),
-                  ),
-              ],
-            )
-            )
+                ],
+              )
+              ),
+        )
         ),
     );
   }

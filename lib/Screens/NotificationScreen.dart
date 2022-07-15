@@ -205,7 +205,108 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
+  // Future<void> gotoNormalOrd(int index) async{
+  //   var pref = await SharedPreferences.getInstance();
+  //   //flav
+  //   List flavs = newOrders[index]['Flavour'];
+  //
+  //
+  //   if(newOrders[index]['CakeName']==null||newOrders[index]['CakeName']=='NULL'){
+  //     pref.setString("CakeName",'Customized cake' );
+  //   }else{
+  //     pref.setString("CakeName", newOrders[index]['CakeName']);
+  //   }
+  //
+  //   pref.remove("Shape");
+  //   pref.remove("CakeID");
+  //   pref.remove("Cake_ID");
+  //   pref.remove("CakeName");
+  //   pref.remove("CakeCommonName");
+  //   pref.remove("CakeType");
+  //   pref.remove("CakeSubType");
+  //   pref.remove("EggOrEggless");
+  //   pref.remove("Image");
+  //   pref.remove("Weight");
+  //   pref.remove("VendorID");
+  //   pref.remove("Vendor_ID");
+  //   pref.remove("VendorName");
+  //   pref.remove("VendorPhoneNumber1");
+  //   pref.remove("VendorPhoneNumber2");
+  //   pref.remove("UserID");
+  //   pref.remove("User_ID");
+  //   pref.remove("UserName");
+  //   pref.remove("UserPhoneNumber");
+  //   pref.remove("DeliveryAddress");
+  //   pref.remove("DeliveryDate");
+  //   pref.remove("DeliverySession");
+  //   pref.remove("DeliveryInformation");
+  //   pref.remove("Price");
+  //   pref.remove("ItemCount");
+  //   pref.remove("Discount");
+  //   pref.remove("ExtraCharges");
+  //   pref.remove("DeliveryCharge");
+  //   pref.remove("Gst");
+  //   pref.remove("Sgst");
+  //   pref.remove("PaymentType");
+  //   pref.remove("PaymentStatus");
+  //   pref.remove("Created_On");
+  //   pref.remove("Status");
+  //   pref.remove("Id");
+  //   pref.remove("_id");
+  //   pref.remove("CustomizeCake");
+  //   pref.remove("VendorAddress");
+  //
+  //
+  //   pref.setString("_id", newOrders[index]['_id']);
+  //   pref.setString("Shape", newOrders[index]['Shape'].toString());
+  //   pref.setString("CakeID", newOrders[index]['CakeID']);
+  //   pref.setString("Cake_ID", newOrders[index]['Cake_ID']);
+  //   pref.setString("CakeCommonName", newOrders[index]['CakeCommonName']);
+  //   pref.setString("CakeType", newOrders[index]['CakeType']);
+  //   pref.setString("CakeSubType", newOrders[index]['CakeSubType']);
+  //   pref.setString("EggOrEggless", newOrders[index]['EggOrEggless']);
+  //   pref.setString("Image", newOrders[index]['Image']);
+  //   pref.setString("Weight", newOrders[index]['Weight']);
+  //   pref.setString("VendorID", newOrders[index]['VendorID']);
+  //   pref.setString("Vendor_ID", newOrders[index]['Vendor_ID']);
+  //   pref.setString("VendorName", newOrders[index]['VendorName']);
+  //   pref.setString("VendorPhoneNumber1", newOrders[index]['VendorPhoneNumber1']);
+  //   pref.setString("VendorPhoneNumber2", newOrders[index]['VendorPhoneNumber2']);
+  //   pref.setString("VendorAddress", newOrders[index]['VendorAddress']);
+  //   pref.setString("UserID", newOrders[index]['UserID']);
+  //   pref.setString("User_ID", newOrders[index]['User_ID']);
+  //   pref.setString("UserName", newOrders[index]['UserName']);
+  //   pref.setString("UserPhoneNumber", newOrders[index]['UserPhoneNumber']);
+  //   pref.setString("DeliveryAddress", newOrders[index]['DeliveryAddress']);
+  //   pref.setString("DeliveryDate", newOrders[index]['DeliveryDate']);
+  //   pref.setString("DeliverySession", newOrders[index]['DeliverySession']);
+  //   pref.setString("DeliveryInformation", newOrders[index]['DeliveryInformation']);
+  //   pref.setString("Price", newOrders[index]['Price']);
+  //   pref.setString("ItemCount", newOrders[index]['ItemCount'].toString());
+  //   pref.setString("Discount", newOrders[index]['Discount'].toString());
+  //   pref.setString("ExtraCharges", newOrders[index]['ExtraCharges']);
+  //   pref.setString("DeliveryCharge", newOrders[index]['DeliveryCharge']);
+  //   pref.setString("Gst", newOrders[index]['Gst']);
+  //   pref.setString("Sgst", newOrders[index]['Sgst'].toString());
+  //   pref.setString("Total", newOrders[index]['Total'].toString());
+  //   pref.setString("Status", newOrders[index]['Status']);
+  //   pref.setString("PaymentType", newOrders[index]['PaymentType']);
+  //   pref.setString("PaymentStatus", newOrders[index]['PaymentStatus']);
+  //   pref.setString("Created_On", newOrders[index]['Created_On']);
+  //   pref.setString("Id", newOrders[index]['Id']);
+  //   pref.setString("CustomizeCake", newOrders[index]['CustomizeCake']);
+  //
+  //
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context)=>OrderDetail(flavour:flavs.toList()))
+  //   );
+  // }
+
+
+  //pass data to next screen
   Future<void> gotoNormalOrd(int index) async{
+
     var pref = await SharedPreferences.getInstance();
     //flav
     List flavs = newOrders[index]['Flavour'];
@@ -289,13 +390,92 @@ class _NotificationScreenState extends State<NotificationScreen> {
     pref.setString("Created_On", newOrders[index]['Created_On']);
     pref.setString("Id", newOrders[index]['Id']);
     pref.setString("CustomizeCake", newOrders[index]['CustomizeCake']);
-    
+
+
 
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context)=>OrderDetail(flavour:flavs.toList()))
     );
   }
+
+
+//pass customize list
+  Future<void> gotoNormalOrdCus(int index) async{
+
+    var pref = await SharedPreferences.getInstance();
+    //flav
+    List flavs = newOrders[index]['Flavour'];
+
+    pref.remove("Shape");
+    pref.remove("CakeID");
+    pref.remove("Cake_ID");
+    pref.remove("CakeName");
+    pref.remove("CakeCommonName");
+    pref.remove("CakeType");
+    pref.remove("CakeSubType");
+    pref.remove("EggOrEggless");
+    pref.remove("Image");
+    pref.remove("Weight");
+    pref.remove("VendorID");
+    pref.remove("Vendor_ID");
+    pref.remove("VendorName");
+    pref.remove("VendorPhoneNumber1");
+    pref.remove("VendorPhoneNumber2");
+    pref.remove("UserID");
+    pref.remove("User_ID");
+    pref.remove("UserName");
+    pref.remove("UserPhoneNumber");
+    pref.remove("DeliveryAddress");
+    pref.remove("DeliveryDate");
+    pref.remove("DeliverySession");
+    pref.remove("DeliveryInformation");
+    pref.remove("Created_On");
+    pref.remove("Status");
+    pref.remove("Id");
+    pref.remove("_id");
+    pref.remove("CustomizeCake");
+    pref.remove("VendorAddress");
+
+
+    pref.setString("_id", newOrders[index]['_id']);
+    pref.setString("Shape", newOrders[index]['Shape'].toString());
+    pref.setString("CakeID", newOrders[index]['CakeID']);
+    pref.setString("Cake_ID", newOrders[index]['Cake_ID']);
+    pref.setString("EggOrEggless", newOrders[index]['EggOrEggless']);
+    pref.setString("Image", 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkp-kR6zRZP6qPx7e-Uvy6lDvv05Ud6TT2Yw&usqp=CAU');
+    pref.setString("CakeType", 'Customized Cake');
+    pref.setString("Weight", newOrders[index]['Weight']);
+    pref.setString("VendorID", newOrders[index]['VendorID']);
+    pref.setString("Vendor_ID", newOrders[index]['Vendor_ID']);
+    pref.setString("UserID", newOrders[index]['UserID']);
+    pref.setString("User_ID", newOrders[index]['User_ID']);
+    pref.setString("UserName", newOrders[index]['UserName']);
+    pref.setString("UserPhoneNumber", newOrders[index]['UserPhoneNumber']);
+    pref.setString("DeliveryAddress", newOrders[index]['DeliveryAddress']);
+    pref.setString("DeliveryDate", newOrders[index]['DeliveryDate']);
+    pref.setString("DeliverySession", newOrders[index]['DeliverySession']);
+    pref.setString("DeliveryInformation", newOrders[index]['DeliveryInformation']);
+    pref.setString("Price", newOrders[index]['Price']);
+    pref.setString("ItemCount", newOrders[index]['ItemCount'].toString());
+    pref.setString("Discount", newOrders[index]['Discount'].toString());
+    pref.setString("ExtraCharges", newOrders[index]['ExtraCharges']);
+    pref.setString("DeliveryCharge", newOrders[index]['DeliveryCharge']);
+    pref.setString("Gst", newOrders[index]['Gst']);
+    pref.setString("Sgst", newOrders[index]['Sgst'].toString());
+    pref.setString("Total", newOrders[index]['Total'].toString());
+    pref.setString("Status", newOrders[index]['Status']);
+    pref.setString("PaymentType", newOrders[index]['PaymentType']);
+    pref.setString("PaymentStatus", newOrders[index]['PaymentStatus']);
+    pref.setString("Created_On", newOrders[index]['Created_On']);
+    pref.setString("Id", newOrders[index]['Id']);
+    pref.setString("CustomizeCake", newOrders[index]['CustomizeCake']);
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context)=>OrderDetail(flavour:flavs.toList()))
+    );
+  }
+
 
   //network check
   Future<void> checkNetwork() async{
@@ -375,166 +555,170 @@ class _NotificationScreenState extends State<NotificationScreen> {
           )
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height*0.9,
-        child:RefreshIndicator(
-          onRefresh: () async{
-            getIniitialPrefs();
-          },
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: newOrders.length>0?
-            // GroupedListView<dynamic , String>(
-            //     elements: newOrders,
-            //     shrinkWrap: true,
-            //     groupBy: (e)=>e['Created_On'],
-            //     order: GroupedListOrder.DESC,
-            //     groupSeparatorBuilder: (String i)=>Container(),
-            //     itemBuilder: (context , e){
-            //       return InkWell(
-            //         onTap: (){
-            //           print(formateToDay(e['Created_On'].toString().split(" ").first));
-            //
-            //         },
-            //         child: Container(
-            //           padding: EdgeInsets.all(15),
-            //           child: Row(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: [
-            //               e['Image']==null?
-            //               Container(
-            //                 alignment: Alignment.center,
-            //                 height: 60,
-            //                 width: 60,
-            //                 decoration: BoxDecoration(
-            //                   shape: BoxShape.circle,
-            //                   color: Colors.grey[300],
-            //                 ),
-            //                 child:
-            //                 Icon(Icons.image_outlined , color:alertsAndColors.darkBlue,size: 35,),
-            //               ):
-            //               Container(
-            //                 alignment: Alignment.center,
-            //                 height: 60,
-            //                 width: 60,
-            //                 decoration: BoxDecoration(
-            //                     shape: BoxShape.circle,
-            //                     color: Colors.grey[300],
-            //                     image: DecorationImage(
-            //                         image: NetworkImage(e['Image'].toString()),
-            //                         fit: BoxFit.cover
-            //                     )
-            //                 ),
-            //               ),
-            //               SizedBox(width: 6,),
-            //               Expanded(
-            //                   child: Column(
-            //                     crossAxisAlignment: CrossAxisAlignment.start,
-            //                     children: [
-            //                       e['CustomizeCake']!=null?
-            //                       Text("New Order "+e['CakeName'].toString()+" From ${e['UserName']}",style: TextStyle(
-            //                           color: Colors.grey[600],
-            //                           fontFamily: "Poppins",
-            //                           fontSize: 13
-            //                       ),):
-            //                       Text("New Customize Cake Is Ordered By ${e['UserName']}. Click to view",style: TextStyle(
-            //                           color: Colors.grey[600],
-            //                           fontFamily: "Poppins",
-            //                           fontSize: 13
-            //                       ),),
-            //                       SizedBox(height: 10,),
-            //                       Text(
-            //                         simplyFormat(time: DateTime.now(),dateOnly: true)==
-            //                             e['Created_On'].toString().split(" ").first?
-            //                         "Today":formateToDay(e['Created_On'].toString().split(" ").first)
-            //                         ,style: TextStyle(
-            //                           color: alertsAndColors.darkBlue,
-            //                           fontSize: 15,
-            //                           fontWeight: FontWeight.bold
-            //                       ),),
-            //                     ],
-            //                   )
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       );
-            //     },
-            // )
-            Column(
-              children:newOrders.map((e){
-                return InkWell(
-                  onTap: (){
-                    print(formateToDay(e['Created_On'].toString().split(" ").first));
-                    if(e['CustomizeCake']!=null){
-                      gotoNormalOrd(newOrders.indexWhere((element) => element["Created_On"]==e["Created_On"]));
-                    }else{
-                      gotoCustomizeOrd(newOrders.indexWhere((element) => element["Created_On"]==e["Created_On"]));
-                    }
+          height: MediaQuery.of(context).size.height*0.9,
+          child:RefreshIndicator(
+            onRefresh: () async{
+              getIniitialPrefs();
+            },
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: newOrders.length>0?
+              // GroupedListView<dynamic , String>(
+              //     elements: newOrders,
+              //     shrinkWrap: true,
+              //     groupBy: (e)=>e['Created_On'],
+              //     order: GroupedListOrder.DESC,
+              //     groupSeparatorBuilder: (String i)=>Container(),
+              //     itemBuilder: (context , e){
+              //       return InkWell(
+              //         onTap: (){
+              //           print(formateToDay(e['Created_On'].toString().split(" ").first));
+              //
+              //         },
+              //         child: Container(
+              //           padding: EdgeInsets.all(15),
+              //           child: Row(
+              //             crossAxisAlignment: CrossAxisAlignment.start,
+              //             children: [
+              //               e['Image']==null?
+              //               Container(
+              //                 alignment: Alignment.center,
+              //                 height: 60,
+              //                 width: 60,
+              //                 decoration: BoxDecoration(
+              //                   shape: BoxShape.circle,
+              //                   color: Colors.grey[300],
+              //                 ),
+              //                 child:
+              //                 Icon(Icons.image_outlined , color:alertsAndColors.darkBlue,size: 35,),
+              //               ):
+              //               Container(
+              //                 alignment: Alignment.center,
+              //                 height: 60,
+              //                 width: 60,
+              //                 decoration: BoxDecoration(
+              //                     shape: BoxShape.circle,
+              //                     color: Colors.grey[300],
+              //                     image: DecorationImage(
+              //                         image: NetworkImage(e['Image'].toString()),
+              //                         fit: BoxFit.cover
+              //                     )
+              //                 ),
+              //               ),
+              //               SizedBox(width: 6,),
+              //               Expanded(
+              //                   child: Column(
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: [
+              //                       e['CustomizeCake']!=null?
+              //                       Text("New Order "+e['CakeName'].toString()+" From ${e['UserName']}",style: TextStyle(
+              //                           color: Colors.grey[600],
+              //                           fontFamily: "Poppins",
+              //                           fontSize: 13
+              //                       ),):
+              //                       Text("New Customize Cake Is Ordered By ${e['UserName']}. Click to view",style: TextStyle(
+              //                           color: Colors.grey[600],
+              //                           fontFamily: "Poppins",
+              //                           fontSize: 13
+              //                       ),),
+              //                       SizedBox(height: 10,),
+              //                       Text(
+              //                         simplyFormat(time: DateTime.now(),dateOnly: true)==
+              //                             e['Created_On'].toString().split(" ").first?
+              //                         "Today":formateToDay(e['Created_On'].toString().split(" ").first)
+              //                         ,style: TextStyle(
+              //                           color: alertsAndColors.darkBlue,
+              //                           fontSize: 15,
+              //                           fontWeight: FontWeight.bold
+              //                       ),),
+              //                     ],
+              //                   )
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       );
+              //     },
+              // )
+              Column(
+                children:newOrders.map((e){
+                  return InkWell(
+                    onTap: (){
+                      print(formateToDay(e['Created_On'].toString().split(" ").first));
+                      if(e['CustomizeCake']!=null){
+                       if (e['CustomizeCake']=='y'){
+                         gotoNormalOrdCus(newOrders.indexWhere((element) => element["Created_On"]==e["Created_On"]));
+                       }else{
+                         gotoNormalOrd(newOrders.indexWhere((element) => element["Created_On"]==e["Created_On"]));
+                       }
+                      }else{
+                        gotoCustomizeOrd(newOrders.indexWhere((element) => element["Created_On"]==e["Created_On"]));
+                      }
 
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        e['Image']==null?
-                        Container(
-                          alignment: Alignment.center,
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey[300],
-                          ),
-                          child:
-                          Icon(Icons.image_outlined , color:alertsAndColors.darkBlue,size: 35,),
-                        ):
-                        Container(
-                          alignment: Alignment.center,
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          e['Image']==null?
+                          Container(
+                            alignment: Alignment.center,
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.grey[300],
-                              image: DecorationImage(
-                                  image: NetworkImage(e['Image'].toString()),
-                                  fit: BoxFit.cover
+                            ),
+                            child:
+                            Icon(Icons.image_outlined , color:alertsAndColors.darkBlue,size: 35,),
+                          ):
+                          Container(
+                            alignment: Alignment.center,
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[300],
+                                image: DecorationImage(
+                                    image: NetworkImage(e['Image'].toString()),
+                                    fit: BoxFit.cover
+                                )
+                            ),
+                          ),
+                          SizedBox(width: 6,),
+                          Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("New Order "+e['CakeName'].toString()+" From ${e['UserName']}",style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontFamily: "Poppins",
+                                      fontSize: 13
+                                  ),),
+                                  SizedBox(height: 10,),
+                                  Text(
+                                    simplyFormat(time: DateTime.now(),dateOnly: true)==
+                                        e['Created_On'].toString().split(" ").first?
+                                    "Today":formateToDay(e['Created_On'].toString().split(" ").first)
+                                    ,style: TextStyle(
+                                      color: alertsAndColors.darkBlue,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold
+                                  ),),
+                                ],
                               )
                           ),
-                        ),
-                        SizedBox(width: 6,),
-                        Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("New Order "+e['CakeName'].toString()+" From ${e['UserName']}",style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontFamily: "Poppins",
-                                    fontSize: 13
-                                ),),
-                                SizedBox(height: 10,),
-                                Text(
-                                  simplyFormat(time: DateTime.now(),dateOnly: true)==
-                                      e['Created_On'].toString().split(" ").first?
-                                  "Today":formateToDay(e['Created_On'].toString().split(" ").first)
-                                  ,style: TextStyle(
-                                    color: alertsAndColors.darkBlue,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold
-                                ),),
-                              ],
-                            )
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
-            ):
-            Container(
-              height: MediaQuery.of(context).size.height*0.9,
-              width: double.infinity,
-              child: Column(
+                  );
+                }).toList(),
+              ):
+              Container(
+                height: MediaQuery.of(context).size.height*0.9,
+                width: double.infinity,
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -547,10 +731,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         fontSize: 18
                     ),)
                   ],
-               ),
+                ),
+              ),
             ),
-          ),
-        )
+          )
       ),
     );
   }
@@ -678,4 +862,5 @@ class GroupedListView<T, E> extends ListView {
 }
 
 enum GroupedListOrder { ASC, DESC }
+
 

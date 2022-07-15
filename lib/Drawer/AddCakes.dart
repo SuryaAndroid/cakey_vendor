@@ -1077,7 +1077,7 @@ class _AddCakesState extends State<AddCakes> {
                         margin: EdgeInsets.only(top: 5),
                         width: double.infinity,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(width: 1, color: Colors.grey),
                             color: Colors.white),
                         child: Column(
@@ -1171,7 +1171,7 @@ class _AddCakesState extends State<AddCakes> {
                         margin: EdgeInsets.only(top: 5),
                         width: double.infinity,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(width: 1, color: Colors.grey),
                             color: Colors.white),
                         child: Column(
@@ -1270,11 +1270,13 @@ class _AddCakesState extends State<AddCakes> {
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    isDense:true,
                     hintText: "Cake Name",
                     label: Text("Cake Name"),
                     labelStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(width: 1, color: Colors.grey)),
                   ),
                 ),
@@ -1290,11 +1292,13 @@ class _AddCakesState extends State<AddCakes> {
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    isDense:true,
                     hintText: "Cake Common Name",
                     label: Text("Cake Common Name"),
                     labelStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(width: 1, color: Colors.grey)),
                   ),
                 ),
@@ -1310,11 +1314,13 @@ class _AddCakesState extends State<AddCakes> {
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    isDense:true,
                     hintText: "Basic Flavour",
                     label: Text("Cake Basic Flavour"),
                     labelStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(width: 1, color: Colors.grey)),
                   ),
                 ),
@@ -1330,11 +1336,13 @@ class _AddCakesState extends State<AddCakes> {
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    isDense:true,
                     hintText: "Basic Shape",
                     label: Text("Cake Basic Shape"),
                     labelStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(width: 1, color: Colors.grey)),
                   ),
                 ),
@@ -1374,7 +1382,7 @@ class _AddCakesState extends State<AddCakes> {
                   child: Container(
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.grey, width: 1)
                     ),
                     child: Row(
@@ -1425,7 +1433,7 @@ class _AddCakesState extends State<AddCakes> {
                       child: Container(
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.grey, width: 1)
                         ),
                         child: Row(
@@ -1455,12 +1463,13 @@ class _AddCakesState extends State<AddCakes> {
                           color: alertsAndColors.darkBlue,
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
-                      decoration: InputDecoration(
+                      decoration: InputDecoration( contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         hintText: "Eggless cake price",
                         label: Text("Eggless cake price"),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     ),
@@ -1486,10 +1495,12 @@ class _AddCakesState extends State<AddCakes> {
                                   fontFamily: "Poppins",
                                   fontWeight: FontWeight.bold),
                               decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                isDense:true,
                                 label: Text("Weight"),
                                 labelStyle: TextStyle(color: Colors.grey),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide(width: 1, color: Colors.grey)),
                               ),
                             )
@@ -1506,10 +1517,12 @@ class _AddCakesState extends State<AddCakes> {
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                              isDense:true,
                               label: Text("Basic cake price"),
                               labelStyle: TextStyle(color: Colors.grey),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(width: 1, color: Colors.grey)),
                             ),
                           )
@@ -1527,12 +1540,14 @@ class _AddCakesState extends State<AddCakes> {
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    isDense:true,
                     alignLabelWithHint: true,
                     hintText: "Description",
                     label: Text("Description"),
                     labelStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(width: 1, color: Colors.grey)),
                   ),
                 ),
@@ -1550,11 +1565,13 @@ class _AddCakesState extends State<AddCakes> {
                               fontFamily: "Poppins",
                               fontWeight: FontWeight.bold),
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            isDense:true,
                             hintText: "Discount %",
                             label: Text("Discount %"),
                             labelStyle: TextStyle(color: Colors.grey),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(width: 1, color: Colors.grey)),
                           ),
                         ),
@@ -1609,10 +1626,10 @@ class _AddCakesState extends State<AddCakes> {
                           child: Container(
                             padding: EdgeInsets.only(left: 10),
                             alignment: Alignment.centerLeft,
-                            height: 60,
+                            height: 48,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey , width: 1),
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
                               "Gst $gstAmt%",
@@ -1672,9 +1689,11 @@ class _AddCakesState extends State<AddCakes> {
                                   });
                                 },
                                 decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                  isDense:true,
                                   hintText: "Min Delivery Time",
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(10),
                                       borderSide: BorderSide(width: 1, color: Colors.grey)),
                                 ),
                               ),
@@ -1686,10 +1705,10 @@ class _AddCakesState extends State<AddCakes> {
                                   child: Container(
                                     alignment: Alignment.center,
                                     padding: EdgeInsets.only(left:5 , right: 5),
-                                    height: 60,
+                                    height: 40,
                                     decoration: BoxDecoration(
                                       border: Border.all(color: Colors.grey , width: 1),
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(
                                       "${minimumTime} $cakeMin",
@@ -1806,9 +1825,11 @@ class _AddCakesState extends State<AddCakes> {
                                 });
                               },
                               decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                isDense:true,
                                 hintText: "Best Use Before",
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide(width: 1, color: Colors.grey)),
                               ),
                             ),
@@ -1820,10 +1841,10 @@ class _AddCakesState extends State<AddCakes> {
                                 child: Container(
                                   alignment: Alignment.center,
                                   padding: EdgeInsets.only(left:5 , right: 5),
-                                  height: 60,
+                                  height: 40,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: Colors.grey , width: 1),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
                                     "${beforeDays} $cakeBestBef",
@@ -1907,9 +1928,11 @@ class _AddCakesState extends State<AddCakes> {
                                 });
                               },
                               decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                isDense:true,
                                 hintText: "Min Time For Keeping In Room Temperature",
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(10),
                                     borderSide: BorderSide(width: 1, color: Colors.grey)),
                               ),
                             ),
@@ -1921,10 +1944,10 @@ class _AddCakesState extends State<AddCakes> {
                                 child: Container(
                                   alignment: Alignment.center,
                                   padding: EdgeInsets.only(left:5 , right: 5),
-                                  height: 60,
+                                  height: 40,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: Colors.grey , width: 1),
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
                                     "${temperature} $cakeRoomTime",

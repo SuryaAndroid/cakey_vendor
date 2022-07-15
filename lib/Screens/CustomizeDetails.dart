@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cakey_vendor/Drawer/CusPriceInfo.dart';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
+import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +67,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
   String currentVendorPhn2 = "";
   String currentVendor_id = "";
   String currentVendorId = "";
-
+  String profileUrl='';
 
 
   //network check
@@ -126,6 +128,8 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
           currentVendorStreet = myVendorList[0]["Address"]['Street'].toString();
           currentVendorState = myVendorList[0]["Address"]['State'].toString();
           currentVendorPin= myVendorList[0]["Address"]['Pincode'].toString();
+          profileUrl = myVendorList[0]['ProfileImage'];
+
 
         });
 
@@ -296,7 +300,12 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                         alignment: Alignment.center,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)=>NotificationScreen())
+                              );
+                            },
                             child: Container(
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
@@ -338,17 +347,22 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                           ],
                         ),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>ProfileScreen())
+                            );
+                          },
                           child:
-                          // profileUrl != "null"
-                          //     ? CircleAvatar(
-                          //   radius: 14.7,
-                          //   backgroundColor: Colors.white,
-                          //   child: CircleAvatar(
-                          //       radius: 13,
-                          //       backgroundImage:
-                          //       NetworkImage("$profileUrl")),
-                          // ) :
+                          profileUrl != "null"
+                              ? CircleAvatar(
+                            radius: 14.7,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                                radius: 13,
+                                backgroundImage:
+                                NetworkImage("$profileUrl")),
+                          ) :
                           CircleAvatar(
                             radius: 14.7,
                             backgroundColor: Colors.white,
@@ -371,455 +385,456 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
               ),
             ),
           )),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.all(8),
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.27,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.grey),
-                            child: Image(
-                                fit: BoxFit.cover,
-                                image: NetworkImage( CakeImage ==null? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyzg66tQkRI0ouITaVRkQOhM3lmOLuYoCkVg&usqp=CAU'
-                                    :CakeImage))),
-                        SizedBox(
-                          height: 60,
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                        top: 15,
-                        left: 3,
-                        child:Status=='New'? Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                          decoration: BoxDecoration(
-                              color: alertsAndColors.lightPink,
-                              borderRadius: new BorderRadius.only(
-                                  topRight:  const  Radius.circular(30.0),
-                                  bottomRight: const  Radius.circular(30.0)
-                              )
-                          ),
-                          child: Text('New',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                        )
-                            :Status=='Ordered'?
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                          decoration: BoxDecoration(
-                              color:Color(0XFF6b55bd),
-                              borderRadius: new BorderRadius.only(
-                                  topRight:  const  Radius.circular(30.0),
-                                  bottomRight: const  Radius.circular(30.0)
-                              )
-                          ),
-                          child: Text('Ordered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                        ):Status=='Delivered'?
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                          decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: new BorderRadius.only(
-                                  topRight:  const  Radius.circular(30.0),
-                                  bottomRight: const  Radius.circular(30.0)
-                              )
-                          ),
-                          child: Text('Delivered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                        ):Status=='Cancelled'?
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                          decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: new BorderRadius.only(
-                                  topRight:  const  Radius.circular(30.0),
-                                  bottomRight: const  Radius.circular(30.0)
-                              )
-                          ),
-                          child: Text('Cancelled',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                        ):Status=='Assigned'?
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                          decoration: BoxDecoration(
-                              color: Colors.lightBlue,
-                              borderRadius: new BorderRadius.only(
-                                  topRight:  const  Radius.circular(30.0),
-                                  bottomRight: const  Radius.circular(30.0)
-                              )
-                          ),
-                          child: Text('Assigned',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                        ):Status=='Sent'?
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                          decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: new BorderRadius.only(
-                                  topRight:  const  Radius.circular(30.0),
-                                  bottomRight: const  Radius.circular(30.0)
-                              )
-                          ),
-                          child: Text('Sent',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                        ):Container()
-                    ),
-                    Positioned(
-                        left: 3,
-                        top: 35,
-                        child: Container(
-                          width: 5.5,
-                          height: 5,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: new BorderRadius.only(
-                                bottomLeft: const Radius.circular(100.0),
-                              )),
-                        )),
-                    Positioned(
-                        top: 200,
-                        left: 15,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 5, right: 5),
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Transform.rotate(
-                                      angle: 120,
-                                      child: Icon(
-                                        Icons.egg_outlined,
-                                        color: Colors.amber,
-                                      ),
-                                    ),
-                                    Text(
-                                      EggOrEggless ,
-                                      style: TextStyle(
-                                          color: Colors.amber,
-                                          fontFamily: "Poppins",
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                    ),
-
-                    Positioned(
-                        left: 10,
-                        top: 240,
-                        child:   Container(
-                          // margin: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 290,
-                                child: Text(CakeName==null?'CAKE NAME':CakeName,style: TextStyle(fontSize: 18,fontFamily: "Poppins",fontWeight: FontWeight.bold,),maxLines: 1,),
-                              ),
-                              Container(
-                                child: Text('ID : ' + '$Id',style: TextStyle(fontSize: 12,fontFamily: "Poppins"),),
-                              )
-                            ],
-                          ),
-                        )),
-                    Positioned(
-                      left: 265,
-                      top: 205,
-                      child: Column(
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          getInitialPrefs();
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      Column(
                         children: [
                           Container(
-                            height: 75,
-                            width: 80,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey[200]
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor:alertsAndColors.lightPink,
-                                  radius: 9,
-                                  child: CircleAvatar(
-                                      radius: 7,
-                                      backgroundColor: Colors.white,
-                                      child: Icon(Icons.person,size: 13,color: alertsAndColors.lightPink,)
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Container(
-                                    child: Text(UserName==null?'UserName':UserName.toString().split(' ').first
-                                      ,style: TextStyle(fontSize: 12,  fontFamily: "Poppins"),)
-                                ),
-                              ],
-                            ),
+                              margin: EdgeInsets.all(8),
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.27,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.grey),
+                              child: Image(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage( CakeImage ==null? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyzg66tQkRI0ouITaVRkQOhM3lmOLuYoCkVg&usqp=CAU'
+                                      :CakeImage))),
+                          SizedBox(
+                            height: 60,
                           ),
-                          Container(
-                            height: 2,
-                            width: 60,
+                        ],
+                      ),
+                      Positioned(
+                          top: 15,
+                          left: 3,
+                          child:Status=='New'? Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
                             decoration: BoxDecoration(
                                 color: alertsAndColors.lightPink,
                                 borderRadius: new BorderRadius.only(
-                                    bottomLeft:  const  Radius.circular(50.0),
-                                    bottomRight: const  Radius.circular(50.0)
+                                    topRight:  const  Radius.circular(30.0),
+                                    bottomRight: const  Radius.circular(30.0)
                                 )
                             ),
+                            child: Text('New',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                          )
+                              :Status=='Ordered'?
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                            decoration: BoxDecoration(
+                                color:Color(0XFF6b55bd),
+                                borderRadius: new BorderRadius.only(
+                                    topRight:  const  Radius.circular(30.0),
+                                    bottomRight: const  Radius.circular(30.0)
+                                )
+                            ),
+                            child: Text('Ordered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                          ):Status=='Delivered'?
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: new BorderRadius.only(
+                                    topRight:  const  Radius.circular(30.0),
+                                    bottomRight: const  Radius.circular(30.0)
+                                )
+                            ),
+                            child: Text('Delivered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                          ):Status=='Cancelled'?
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: new BorderRadius.only(
+                                    topRight:  const  Radius.circular(30.0),
+                                    bottomRight: const  Radius.circular(30.0)
+                                )
+                            ),
+                            child: Text('Cancelled',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                          ):Status=='Assigned'?
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                            decoration: BoxDecoration(
+                                color: Colors.lightBlue,
+                                borderRadius: new BorderRadius.only(
+                                    topRight:  const  Radius.circular(30.0),
+                                    bottomRight: const  Radius.circular(30.0)
+                                )
+                            ),
+                            child: Text('Assigned',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                          ):Status=='Sent'?
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: new BorderRadius.only(
+                                    topRight:  const  Radius.circular(30.0),
+                                    bottomRight: const  Radius.circular(30.0)
+                                )
+                            ),
+                            child: Text('Sent',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                          ):Container()
+                      ),
+                      Positioned(
+                          left: 3,
+                          top: 35,
+                          child: Container(
+                            width: 5.5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: new BorderRadius.only(
+                                  bottomLeft: const Radius.circular(100.0),
+                                )),
+                          )),
+                      Positioned(
+                          top: 200,
+                          left: 15,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 5, right: 5),
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      topRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Transform.rotate(
+                                        angle: 120,
+                                        child: Icon(
+                                          Icons.egg_outlined,
+                                          color: Colors.amber,
+                                        ),
+                                      ),
+                                      Text(
+                                        EggOrEggless ,
+                                        style: TextStyle(
+                                            color: Colors.amber,
+                                            fontFamily: "Poppins",
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                      ),
+
+                      Positioned(
+                          left: 10,
+                          top: 240,
+                          child:   Container(
+                            // margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 290,
+                                  child: Text(CakeName==null?'CAKE NAME':CakeName,style: TextStyle(fontSize: 18,fontFamily: "Poppins",fontWeight: FontWeight.bold,),maxLines: 1,),
+                                ),
+                                Container(
+                                  child: Text('ID : ' + '$Id',style: TextStyle(fontSize: 12,fontFamily: "Poppins"),),
+                                )
+                              ],
+                            ),
+                          )),
+                      Positioned(
+                        left: 265,
+                        top: 205,
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 75,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.grey[200]
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor:alertsAndColors.lightPink,
+                                    radius: 9,
+                                    child: CircleAvatar(
+                                        radius: 7,
+                                        backgroundColor: Colors.white,
+                                        child: Icon(Icons.person,size: 13,color: alertsAndColors.lightPink,)
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Container(
+                                      child: Text(UserName==null?'UserName':UserName.toString().split(' ').first
+                                        ,style: TextStyle(fontSize: 12,  fontFamily: "Poppins"),)
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 2,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                  color: alertsAndColors.lightPink,
+                                  borderRadius: new BorderRadius.only(
+                                      bottomLeft:  const  Radius.circular(50.0),
+                                      bottomRight: const  Radius.circular(50.0)
+                                  )
+                              ),
+                            )
+                          ],
+                        ),
+
+                      ),
+                    ],
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    color: Color(0XFFd9effc),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Type Of Cake',style: TextStyle(fontFamily: "Poppins"),),
+                              Text(CakeType,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Order Date',style: TextStyle(fontFamily: "Poppins"),),
+                              Text(Created_On,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Delivery Date',style: TextStyle(fontFamily: "Poppins"),),
+                              Text(DeliveryDate +' - '+ DeliverySession,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            ],
                           )
                         ],
                       ),
-
                     ),
-                  ],
-                ),
+                  ),
 
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  color: Color(0XFFd9effc),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    padding: EdgeInsets.only(top:20,bottom: 10),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text('CAKE INFO',style: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold),),
+                        SizedBox(height: 3,),
+                        Container(
+                          height: 1,
+                          color: Colors.grey,
+                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Type Of Cake',style: TextStyle(fontFamily: "Poppins"),),
-                            Text(CakeType,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            Text('Flavour                               ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: ":  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text: flavour[0]['Name'], style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
+                            )
                           ],
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(height: 3,),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Order Date',style: TextStyle(fontFamily: "Poppins"),),
-                            Text(Created_On,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            Text('Shape                                ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: ":  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text: Shape, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
+                            )
                           ],
                         ),
-                        SizedBox(height: 10,),
+
+                        SizedBox(height: 3,),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Delivery Date',style: TextStyle(fontFamily: "Poppins"),),
-                            Text(DeliveryDate +' - '+ DeliverySession,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            Text('Weight                               ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: ":  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text: Weight, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
+                            )
                           ],
+                        ),
+                        SizedBox(height: 3,),
+                        Row(
+                          children: [
+                            Text('Message On the Cake  ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: " :  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text:MessageOntheCake==''?'-':MessageOntheCake, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
+                            )
+                          ],
+                        ),
+
+                      ],
+                    ),
+                  ),
+
+
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('CUSTOMER INFO',style: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold),),
+                        SizedBox(height: 3,),
+                        Container(
+                          height: 1,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(height: 3,),
+                        Row(
+                          children: [
+                            Text('Customer ID                        ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: ":  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text: User_ID, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 3,),
+                        Row(
+                          children: [
+                            Text('Customer Name                ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: ":  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text: UserName, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 3,),
+                        Row(
+                          children: [
+                            Text('Customer Phonenumber',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text(" :  "),
+                            Text( '$UserPhoneNumber ', style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                            CircleAvatar(
+                              radius:9.5,
+                              child:InkWell(
+                                onTap: () async{
+                                  String phoneNumber =UserPhoneNumber;
+                                  final Uri launchUri = Uri(
+                                    scheme: 'tel',
+                                    path: phoneNumber,
+                                  );
+                                  await launch(launchUri.toString());
+                                },
+                                child: Icon(Icons.phone,size: 11,),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical:10),
+                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    color: Colors.grey[300],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('STATUS',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
+                        SizedBox(height: 3,),
+                        Container(
+                          height: 1,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(height: 5,),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(Status,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.grey),),
+                            ]
                         )
                       ],
                     ),
                   ),
-                ),
-
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  padding: EdgeInsets.only(top:20,bottom: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('CAKE INFO',style: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold),),
-                      SizedBox(height: 3,),
-                      Container(
-                        height: 1,
-                        color: Colors.grey,
+                  SizedBox(height: 10,),
+                  (Status == 'Sent')?Container():
+                  Center(
+                    child: Container(
+                      width: 200,
+                      height: 40,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: alertsAndColors.lightPink,
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      Row(
-                        children: [
-                          Text('Flavour                               ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: ":  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text: flavour[0]['Name'], style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
+                      child: InkWell(
+                        onTap: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>CusPriceInfo(flavour: flavour)));
+                        },
+                        child: Text('SEND INVOICE',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.white,fontSize: 18)),
                       ),
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Shape                                ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: ":  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text: Shape, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
-                      ),
-
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Weight                               ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: ":  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text: Weight, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Message On the Cake  ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: " :  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text:MessageOntheCake==''?'-':MessageOntheCake, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
-                      ),
-
-                    ],
-                  ),
-                ),
-
-
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('CUSTOMER INFO',style: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold),),
-                      SizedBox(height: 3,),
-                      Container(
-                        height: 1,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Customer ID                        ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: ":  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text: User_ID, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Customer Name                ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: ":  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text: UserName, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Customer Phonenumber',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text(" :  "),
-                          Text( '$UserPhoneNumber ', style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                          CircleAvatar(
-                            radius:9.5,
-                            child:InkWell(
-                              onTap: () async{
-                                String phoneNumber =UserPhoneNumber;
-                                final Uri launchUri = Uri(
-                                  scheme: 'tel',
-                                  path: phoneNumber,
-                                );
-                                await launch(launchUri.toString());
-                              },
-                              child: Icon(Icons.phone,size: 11,),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical:10),
-                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                  color: Colors.grey[300],
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('STATUS',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
-                      SizedBox(height: 3,),
-                      Container(
-                        height: 1,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(Status,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.grey),),
-                          ]
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10,),
-                (Status == 'Sent')?Container():
-                Center(
-                  child: Container(
-                    width: 200,
-                    height: 40,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: alertsAndColors.lightPink,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: InkWell(
-                      onTap: (){
-                        setState((){
-                          // showEditPrice(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context)=>CusPriceInfo(flavour: flavour)));
-                          // statusUpdate();
-                        });
-                      },
-                      child: Text('SEND INVOICE',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.white,fontSize: 18)),
                     ),
                   ),
-                ),
-                SizedBox(height: 20,),
-              ],
+                  SizedBox(height: 20,),
+                ],
+              ),
             ),
           ),
         ),

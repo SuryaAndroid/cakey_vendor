@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
+import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +74,7 @@ class _OrderDetailState extends State<OrderDetail> {
  String currentVendorPhn2 = "";
  String currentVendor_id = "";
  String currentVendorId = "";
-
+ String profileUrl='';
  //network check
  Future<void> checkNetwork() async{
    try {
@@ -131,6 +133,8 @@ class _OrderDetailState extends State<OrderDetail> {
          currentVendorStreet = myVendorList[0]["Address"]['Street'].toString();
          currentVendorState = myVendorList[0]["Address"]['State'].toString();
          currentVendorPin= myVendorList[0]["Address"]['Pincode'].toString();
+         profileUrl = myVendorList[0]['ProfileImage'];
+
 
        });
 
@@ -324,7 +328,12 @@ class _OrderDetailState extends State<OrderDetail> {
                         alignment: Alignment.center,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)=>NotificationScreen())
+                              );
+                            },
                             child: Container(
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
@@ -366,17 +375,22 @@ class _OrderDetailState extends State<OrderDetail> {
                           ],
                         ),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>ProfileScreen())
+                            );
+                          },
                           child:
-                              // profileUrl != "null"
-                              //     ? CircleAvatar(
-                              //   radius: 14.7,
-                              //   backgroundColor: Colors.white,
-                              //   child: CircleAvatar(
-                              //       radius: 13,
-                              //       backgroundImage:
-                              //       NetworkImage("$profileUrl")),
-                              // ) :
+                              profileUrl != "null"
+                                  ? CircleAvatar(
+                                radius: 14.7,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                    radius: 13,
+                                    backgroundImage:
+                                    NetworkImage("$profileUrl")),
+                              ) :
                               CircleAvatar(
                             radius: 14.7,
                             backgroundColor: Colors.white,
@@ -399,766 +413,771 @@ class _OrderDetailState extends State<OrderDetail> {
               ),
             ),
           )),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.all(8),
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height * 0.27,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.grey),
-                            child: Image(
-                                fit: BoxFit.cover,
-                                image: NetworkImage( CakeImage ==null? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyzg66tQkRI0ouITaVRkQOhM3lmOLuYoCkVg&usqp=CAU'
-                                :CakeImage))),
-                        SizedBox(
-                          height: 60,
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                        top: 15,
-                        left: 3,
-                          child:Status=='New'? Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                            decoration: BoxDecoration(
-                                color: alertsAndColors.lightPink,
-                                borderRadius: new BorderRadius.only(
-                                    topRight:  const  Radius.circular(30.0),
-                                    bottomRight: const  Radius.circular(30.0)
-                                )
-                            ),
-                            child: Text('New',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                          )
-                              :Status=='Preparing'?
+      body: RefreshIndicator(
+        onRefresh: () async{
+          getInitialPrefs();
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      Column(
+                        children: [
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                              margin: EdgeInsets.all(8),
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.27,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.grey),
+                              child: Image(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage( CakeImage ==null? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyzg66tQkRI0ouITaVRkQOhM3lmOLuYoCkVg&usqp=CAU'
+                                  :CakeImage))),
+                          SizedBox(
+                            height: 60,
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                          top: 15,
+                          left: 3,
+                            child:Status=='New'? Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                              decoration: BoxDecoration(
+                                  color: alertsAndColors.lightPink,
+                                  borderRadius: new BorderRadius.only(
+                                      topRight:  const  Radius.circular(30.0),
+                                      bottomRight: const  Radius.circular(30.0)
+                                  )
+                              ),
+                              child: Text('New',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                            )
+                                :Status=='Preparing'?
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                              decoration: BoxDecoration(
+                                  color:Color(0XFF6b55bd),
+                                  borderRadius: new BorderRadius.only(
+                                      topRight:  const  Radius.circular(30.0),
+                                      bottomRight: const  Radius.circular(30.0)
+                                  )
+                              ),
+                              child: Text('Preparing',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                            ):Status=='Delivered'?
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: new BorderRadius.only(
+                                      topRight:  const  Radius.circular(30.0),
+                                      bottomRight: const  Radius.circular(30.0)
+                                  )
+                              ),
+                              child: Text('Delivered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                            ):Status=='Cancelled'?
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: new BorderRadius.only(
+                                      topRight:  const  Radius.circular(30.0),
+                                      bottomRight: const  Radius.circular(30.0)
+                                  )
+                              ),
+                              child: Text('Cancelled',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                            ):Status=='Assigned'?
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
+                              decoration: BoxDecoration(
+                                  color: Colors.lightBlue,
+                                  borderRadius: new BorderRadius.only(
+                                      topRight:  const  Radius.circular(30.0),
+                                      bottomRight: const  Radius.circular(30.0)
+                                  )
+                              ),
+                              child: Text('Assigned',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
+                            ):Container()
+                          ),
+                      Positioned(
+                          left: 3,
+                          top: 35,
+                          child: Container(
+                            width: 5.5,
+                            height: 5,
                             decoration: BoxDecoration(
-                                color:Color(0XFF6b55bd),
+                                color: Colors.grey[300],
                                 borderRadius: new BorderRadius.only(
-                                    topRight:  const  Radius.circular(30.0),
-                                    bottomRight: const  Radius.circular(30.0)
-                                )
-                            ),
-                            child: Text('Preparing',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                          ):Status=='Delivered'?
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                            decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: new BorderRadius.only(
-                                    topRight:  const  Radius.circular(30.0),
-                                    bottomRight: const  Radius.circular(30.0)
-                                )
-                            ),
-                            child: Text('Delivered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                          ):Status=='Cancelled'?
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: new BorderRadius.only(
-                                    topRight:  const  Radius.circular(30.0),
-                                    bottomRight: const  Radius.circular(30.0)
-                                )
-                            ),
-                            child: Text('Cancelled',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                          ):Status=='Assigned'?
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
-                            decoration: BoxDecoration(
-                                color: Colors.lightBlue,
-                                borderRadius: new BorderRadius.only(
-                                    topRight:  const  Radius.circular(30.0),
-                                    bottomRight: const  Radius.circular(30.0)
-                                )
-                            ),
-                            child: Text('Assigned',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
-                          ):Container()
-                        ),
-                    Positioned(
-                        left: 3,
-                        top: 35,
-                        child: Container(
-                          width: 5.5,
-                          height: 5,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: new BorderRadius.only(
-                                bottomLeft: const Radius.circular(100.0),
-                              )),
-                        )),
-                    // Positioned(
-                    //     right: 20,
-                    //     top: 17,
-                    //     child: Container(
-                    //       // padding: EdgeInsets.all(8),
-                    //       padding:
-                    //           EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                    //       decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.circular(25),
-                    //           color: Colors.white),
-                    //       child: InkWell(
-                    //         onTap: () {},
-                    //         child: Text(
-                    //           'EDIT',
-                    //           style: TextStyle(
-                    //               color: Colors.orange,
-                    //               fontSize: 12,
-                    //               fontFamily: "Poppins",
-                    //               fontWeight: FontWeight.bold),
-                    //         ),
-                    //       ),
-                    //     )),
-                    Positioned(
-                        top: 200,
-                        left: 15,
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
-                              child: Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  child: Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(8),
-                                        topRight: Radius.circular(8),
+                                  bottomLeft: const Radius.circular(100.0),
+                                )),
+                          )),
+                      // Positioned(
+                      //     right: 20,
+                      //     top: 17,
+                      //     child: Container(
+                      //       // padding: EdgeInsets.all(8),
+                      //       padding:
+                      //           EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                      //       decoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.circular(25),
+                      //           color: Colors.white),
+                      //       child: InkWell(
+                      //         onTap: () {},
+                      //         child: Text(
+                      //           'EDIT',
+                      //           style: TextStyle(
+                      //               color: Colors.orange,
+                      //               fontSize: 12,
+                      //               fontFamily: "Poppins",
+                      //               fontWeight: FontWeight.bold),
+                      //         ),
+                      //       ),
+                      //     )),
+                      Positioned(
+                          top: 200,
+                          left: 15,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
+                                child: Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 5, right: 5),
+                                    child: Container(
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(8),
+                                          topRight: Radius.circular(8),
+                                        ),
                                       ),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Transform.rotate(
-                                          angle: 120,
-                                          child: Icon(
-                                            Icons.egg_outlined,
-                                            color: Colors.amber,
-                                          ),
-                                        ),
-                                        Text(
-                                          EggOrEggless ,
-                                          style: TextStyle(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Transform.rotate(
+                                            angle: 120,
+                                            child: Icon(
+                                              Icons.egg_outlined,
                                               color: Colors.amber,
-                                              fontFamily: "Poppins",
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
+                                            ),
+                                          ),
+                                          Text(
+                                            EggOrEggless ,
+                                            style: TextStyle(
+                                                color: Colors.amber,
+                                                fontFamily: "Poppins",
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                        ),
-
-                    Positioned(
-                        left: 10,
-                        top: 240,
-                        child:   Container(
-                      // margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 290,
-                            child: Text(CakeName==null?'CAKE NAME':CakeName,style: TextStyle(fontSize: 18,fontFamily: "Poppins",fontWeight: FontWeight.bold,),maxLines: 1,),
+                              )
                           ),
-                          Container(
-                            child: Text('ID : ' + '$Id',style: TextStyle(fontSize: 12,fontFamily: "Poppins"),),
+
+                      Positioned(
+                          left: 10,
+                          top: 240,
+                          child:   Container(
+                        // margin: EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 290,
+                              child: Text(CakeName==null?'CAKE NAME':CakeName,style: TextStyle(fontSize: 18,fontFamily: "Poppins",fontWeight: FontWeight.bold,),maxLines: 1,),
+                            ),
+                            Container(
+                              child: Text('ID : ' + '$Id',style: TextStyle(fontSize: 12,fontFamily: "Poppins"),),
+                            )
+                          ],
+                        ),
+                      )),
+                      Positioned(
+                          left: 265,
+                          top: 205,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 75,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey[200]
+                                ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor:alertsAndColors.lightPink,
+                                        radius: 9,
+                                        child: CircleAvatar(
+                                            radius: 7,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(Icons.person,size: 13,color: alertsAndColors.lightPink,)
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Container(
+                                          child: Text(UserName==null?'UserName':UserName.toString().split(' ').first
+                                            ,style: TextStyle(fontSize: 12,  fontFamily: "Poppins"),)
+                                      ),
+                                    ],
+                                  ),
+                              ),
+                              Container(
+                                height: 2,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  color: alertsAndColors.lightPink,
+                                    borderRadius: new BorderRadius.only(
+                                        bottomLeft:  const  Radius.circular(50.0),
+                                        bottomRight: const  Radius.circular(50.0)
+                                    )
+                                ),
+                              )
+                            ],
+                          ),
+
+                      ),
+                    ],
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    color: Color(0XFFd9effc),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Type Of Cake',style: TextStyle(fontFamily: "Poppins"),),
+                              Text(CakeType,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Order Date',style: TextStyle(fontFamily: "Poppins"),),
+                              Text(Created_On,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Delivery Date',style: TextStyle(fontFamily: "Poppins"),),
+                              Text(DeliveryDate +' - '+ DeliverySession,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            ],
                           )
                         ],
                       ),
-                    )),
-                    Positioned(
-                        left: 265,
-                        top: 205,
-                        child: Column(
+                    ),
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    padding: EdgeInsets.only(top:20,bottom: 10),
+                    child: Column(
+                      children: [
+                        Row(
                           children: [
-                            Container(
-                              height: 75,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey[200]
-                              ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor:alertsAndColors.lightPink,
-                                      radius: 9,
-                                      child: CircleAvatar(
-                                          radius: 7,
-                                          backgroundColor: Colors.white,
-                                          child: Icon(Icons.person,size: 13,color: alertsAndColors.lightPink,)
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Container(
-                                        child: Text(UserName==null?'UserName':UserName.toString().split(' ').first
-                                          ,style: TextStyle(fontSize: 12,  fontFamily: "Poppins"),)
-                                    ),
-                                  ],
-                                ),
-                            ),
-                            Container(
-                              height: 2,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                color: alertsAndColors.lightPink,
-                                  borderRadius: new BorderRadius.only(
-                                      bottomLeft:  const  Radius.circular(50.0),
-                                      bottomRight: const  Radius.circular(50.0)
+                            Text('Flavour                               ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                                Text.rich(
+                                    TextSpan(
+                                      text: ":  ",
+                                      children:  <TextSpan>[
+                                        TextSpan(text: flavour[0]['Name'], style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                      ],
+                                    )
                                   )
-                              ),
+                          ],
+                        ),
+                        SizedBox(height: 3,),
+                        Row(
+                          children: [
+                            Text('Shape                                ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: ":  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text: 'Round', style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
                             )
                           ],
                         ),
 
-                    ),
-                  ],
-                ),
+                        SizedBox(height: 3,),
+                        Row(
+                          children: [
+                            Text('Weight                               ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: ":  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text: Weight, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 3,),
+                        Row(
+                          children: [
+                            Text('Message On the Cake  ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                            Text.rich(
+                                TextSpan(
+                                  text: " :  ",
+                                  children:  <TextSpan>[
+                                    TextSpan(text:MessageOntheCake==''?'-':MessageOntheCake, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                  ],
+                                )
+                            )
+                          ],
+                        ),
 
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  color: Color(0XFFd9effc),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                      ],
+                    ),
+                  ),
+
+
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color(0XFFff6f52)),
+                      color: Color(0XFFfcd0c7)
+                    ),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Type Of Cake',style: TextStyle(fontFamily: "Poppins"),),
-                            Text(CakeType,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            Text('PROFILE INFO:',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
+                            // CustomizeCake=="y"?Container(
+                            //     padding: EdgeInsets.symmetric(horizontal: 8,vertical: 2),
+                            //     decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(10),
+                            //       color: alertsAndColors.lightPink
+                            //     ),
+                            //     child: InkWell(
+                            //         onTap: (){
+                            //           showEditPrice(context);
+                            //         }, child:Text('Edit',style: TextStyle(fontFamily: "Poppins",color: Colors.white,fontSize: 11))
+                            //     ),
+                            //   ):Container()
                           ],
                         ),
-                        SizedBox(height: 10,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Order Date',style: TextStyle(fontFamily: "Poppins"),),
-                            Text(Created_On,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
-                          ],
+                        SizedBox(height: 5,),
+                        Container(
+                          height: 1,
+                          color: Colors.white,
                         ),
-                        SizedBox(height: 10,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Delivery Date',style: TextStyle(fontFamily: "Poppins"),),
-                            Text(DeliveryDate +' - '+ DeliverySession,style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                        SizedBox(height: 5,),
 
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  padding: EdgeInsets.only(top:20,bottom: 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text('Flavour                               ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                              Text.rich(
-                                  TextSpan(
-                                    text: ":  ",
-                                    children:  <TextSpan>[
-                                      TextSpan(text: flavour[0]['Name'], style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                    ],
-                                  )
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Item total',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
+                            Text.rich(
+                                TextSpan(
+                                    text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
+                                    children:[
+                                      TextSpan(
+                                        text: " $Dprice", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
+                                      )
+                                    ]
                                 )
-                        ],
-                      ),
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Shape                                ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: ":  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text: 'Round', style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
-                      ),
-
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Weight                               ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: ":  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text: Weight, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text('Message On the Cake  ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                          Text.rich(
-                              TextSpan(
-                                text: " :  ",
-                                children:  <TextSpan>[
-                                  TextSpan(text:MessageOntheCake==''?'-':MessageOntheCake, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                                ],
-                              )
-                          )
-                        ],
-                      ),
-
-                    ],
-                  ),
-                ),
-
-
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Color(0XFFff6f52)),
-                    color: Color(0XFFfcd0c7)
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('PROFILE INFO:',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
-                          // CustomizeCake=="y"?Container(
-                          //     padding: EdgeInsets.symmetric(horizontal: 8,vertical: 2),
-                          //     decoration: BoxDecoration(
-                          //       borderRadius: BorderRadius.circular(10),
-                          //       color: alertsAndColors.lightPink
-                          //     ),
-                          //     child: InkWell(
-                          //         onTap: (){
-                          //           showEditPrice(context);
-                          //         }, child:Text('Edit',style: TextStyle(fontFamily: "Poppins",color: Colors.white,fontSize: 11))
-                          //     ),
-                          //   ):Container()
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Container(
-                        height: 1,
-                        color: Colors.white,
-                      ),
-                      SizedBox(height: 5,),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Item total',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
-                          Text.rich(
-                              TextSpan(
-                                  text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
-                                  children:[
-                                    TextSpan(
-                                      text: " $Dprice", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
-                                    )
-                                  ]
-                              )
-                          ),                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Delivery Charge',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
-                          Text.rich(
-                              TextSpan(
-                                  text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
-                                  children:[
-                                    TextSpan(
-                                      text: " $DeliveryCharge", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
-                                    )
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Discount',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
-                          Text.rich(
-                              TextSpan(
-                                  text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
-                                  children:[
-                                    TextSpan(
-                                      text: " $Ddiscount", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
-                                    )
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Extra Charges',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
-                          Text.rich(
-                              TextSpan(
-                                  text: "₹ ",style: TextStyle(fontSize: 10,color: Colors.black54),
-                                  children:[
-                                    TextSpan(
-                                      text: '$DextraCharge', style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
-                                    )
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('GST',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
-                          Text.rich(
-                              TextSpan(
-                                  text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
-                                  children:[
-                                    TextSpan(
-                                      text: " $Dgst", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
-                                    )
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('SGST',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
-                          Text.rich(
-                              TextSpan(
-                                  text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
-                                  children:[
-                                    TextSpan(
-                                      text: " $Dsgst", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
-                                    )
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                      Container(
-                        height: 1,
-                        color: Color(0XFFFFFFFF),
-                      ),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Bill Total',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
-                          Text.rich(
-                              TextSpan(
-                                  text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
-                                  children:[
-                                    TextSpan(
-                                      text: " $Dtotal", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
-                                    )
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('CUSTOMER INFO',style: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold),),
-                    SizedBox(height: 3,),
-                    Container(
-                      height: 1,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(height: 3,),
-                    Row(
-                      children: [
-                        Text('Customer ID                        ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                        Text.rich(
-                            TextSpan(
-                              text: ":  ",
-                              children:  <TextSpan>[
-                                TextSpan(text: User_ID, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                              ],
-                            )
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 3,),
-                    Row(
-                      children: [
-                        Text('Customer Name                ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                        Text.rich(
-                            TextSpan(
-                              text: ":  ",
-                              children:  <TextSpan>[
-                                TextSpan(text: UserName==null?'UserName':UserName.toString().split(' ').first, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                              ],
-                            )
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 3,),
-                    Row(
-                      children: [
-                        Text('Customer Phonenumber',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
-                        Text(" :  "),
-                        Text( '$UserPhoneNumber ', style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
-                        CircleAvatar(
-                          radius:9.5,
-                            child:InkWell(
-                              onTap: () async{
-                                String phoneNumber =UserPhoneNumber;
-                                final Uri launchUri = Uri(
-                                  scheme: 'tel',
-                                  path: phoneNumber,
-                                );
-                                await launch(launchUri.toString());
-                              },
-                                child: Icon(Icons.phone,size: 11,),
-                                 ),
+                            ),                        ],
+                        ),
+                        SizedBox(height: 5,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Delivery Charge',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
+                            Text.rich(
+                                TextSpan(
+                                    text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
+                                    children:[
+                                      TextSpan(
+                                        text: " $DeliveryCharge", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Discount',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
+                            Text.rich(
+                                TextSpan(
+                                    text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
+                                    children:[
+                                      TextSpan(
+                                        text: " $Ddiscount", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Extra Charges',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
+                            Text.rich(
+                                TextSpan(
+                                    text: "₹ ",style: TextStyle(fontSize: 10,color: Colors.black54),
+                                    children:[
+                                      TextSpan(
+                                        text: '$DextraCharge', style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('GST',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
+                            Text.rich(
+                                TextSpan(
+                                    text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
+                                    children:[
+                                      TextSpan(
+                                        text: " $Dgst", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('SGST',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
+                            Text.rich(
+                                TextSpan(
+                                    text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
+                                    children:[
+                                      TextSpan(
+                                        text: " $Dsgst", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5,),
+                        Container(
+                          height: 1,
+                          color: Color(0XFFFFFFFF),
+                        ),
+                        SizedBox(height: 5,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Bill Total',style: TextStyle(fontFamily: "Poppins",color: Colors.black54),),
+                            Text.rich(
+                                TextSpan(
+                                    text: "₹",style: TextStyle(fontSize: 10,color: Colors.black54),
+                                    children:[
+                                      TextSpan(
+                                        text: " $Dtotal", style: TextStyle(fontFamily: "Poppins",fontSize: 13,color: Colors.black),
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
+
                 Container(
-                  margin: EdgeInsets.symmetric(vertical:10),
-                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                  color: Colors.grey[300],
+                  margin: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                          Text('STATUS',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
+                      Text('CUSTOMER INFO',style: TextStyle(fontFamily: 'Poppins',fontWeight: FontWeight.bold),),
                       SizedBox(height: 3,),
                       Container(
                         height: 1,
                         color: Colors.grey,
                       ),
-                      SizedBox(height: 5,),
-
-
+                      SizedBox(height: 3,),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                        Text(StatusUpdate.toUpperCase(),style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.grey),),
-                              (Status == 'Delivered'||Status=='Cancelled')?Container():Container(
-                                // padding: EdgeInsets.only(right: 15,bottom: 10),
-                                width: 25,
-                                height: 25,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.grey[200]
-                                ),
-                                child:InkWell(
-                                  onTap: (){
-                                    showDialog(
-                                        context: context,
-                                        barrierDismissible: true,
-                                        builder: (context)=>
-                                    AlertDialog(
-                                        content:Container(
-                                          height: 140,
-                                          child: Column(
-                                            children: [
-                                              Text('Status :',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Container(
-                                                height: 1,
-                                                color: Colors.grey,
-                                              ),
-                                              SizedBox(height: 10,),
-                                              (Status == 'New'||Status=='Assigned')?
-                                                  Column(
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: (){
-                                                            this.setState(() {
-                                                              StatusUpdate ='Preparing';
-                                                              Update="Pre";
-                                                            });
-                                                            },
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text('Preparing',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,),),
-                                                            StatusUpdate =='Preparing'?
-                                                            CircleAvatar(
-                                                              radius: 9,
-                                                              backgroundColor: Colors.green,
-                                                              child: Icon(Icons.done,color: Colors.white,size: 10,),
-                                                            ):Container()
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 10,),
-                                                      InkWell(
-                                                        onTap: (){
-                                                          this.setState(() {
-                                                            StatusUpdate ='Cancelled';
-                                                            Update="Can";
-                                                          });
-                                                        },
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text('Cancelled',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,),),
-                                                            StatusUpdate =='Cancelled'?
-                                                            CircleAvatar(
-                                                              radius: 9,
-                                                              backgroundColor: Colors.green,
-                                                              child: Icon(Icons.done,color: Colors.white,size: 10,),
-                                                            ):Container()
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                  :Status == 'Preparing'?
-                                              InkWell(
-                                                onTap: (){
-                                                  this.setState(() {
-                                                    StatusUpdate ='Delivered';
-                                                    Update="Del";
-                                                  });
-                                                },
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text('Delivered',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,),),
-                                                    StatusUpdate =='Delivered'?
-                                                    CircleAvatar(
-                                                      radius: 9,
-                                                      backgroundColor: Colors.green,
-                                                      child: Icon(Icons.done,color: Colors.white,size: 10,),
-                                                    ):Container()
-                                                  ],
-                                                ),
-                                              ) :Container(),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Container(
-                                                    width: 80,
-                                                    height: 30,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      color: alertsAndColors.lightPink,
-                                                      borderRadius: BorderRadius.circular(20),
-                                                    ),
-                                                    child: InkWell(
-                                                      onTap: (){
-                                                        Navigator.pop(context);
-                                                        },
-                                                       child: Text('Cancel',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.white,fontSize: 14),),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    width: 80,
-                                                    height: 30,
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                      color: alertsAndColors.lightPink,
-                                                      borderRadius: BorderRadius.circular(20),
-                                                    ),
-                                                    child: InkWell(
-                                                      onTap: (){
-                                                        statusUpdate();
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text('Save',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.white,fontSize: 14),),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                    )
-                                    )
-                                    );
-                                  },
-
-                                  child:Icon(Icons.keyboard_arrow_down,color: alertsAndColors.lightPink,)) ,
-                                )
-                      ]
-                      )
-
+                        children: [
+                          Text('Customer ID                        ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                          Text.rich(
+                              TextSpan(
+                                text: ":  ",
+                                children:  <TextSpan>[
+                                  TextSpan(text: User_ID, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                ],
+                              )
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 3,),
+                      Row(
+                        children: [
+                          Text('Customer Name                ',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                          Text.rich(
+                              TextSpan(
+                                text: ":  ",
+                                children:  <TextSpan>[
+                                  TextSpan(text: UserName==null?'UserName':UserName.toString().split(' ').first, style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                                ],
+                              )
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 3,),
+                      Row(
+                        children: [
+                          Text('Customer Phonenumber',style: TextStyle(fontFamily: "Poppins",fontSize: 13),),
+                          Text(" :  "),
+                          Text( '$UserPhoneNumber ', style: TextStyle(fontWeight: FontWeight.bold,fontFamily: "Poppins",fontSize: 15)),
+                          CircleAvatar(
+                            radius:9.5,
+                              child:InkWell(
+                                onTap: () async{
+                                  String phoneNumber =UserPhoneNumber;
+                                  final Uri launchUri = Uri(
+                                    scheme: 'tel',
+                                    path: phoneNumber,
+                                  );
+                                  await launch(launchUri.toString());
+                                },
+                                  child: Icon(Icons.phone,size: 11,),
+                                   ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-                SizedBox(height: 10,),
-                //
-                // Center(
-                //   child: Container(
-                //     width: 200,
-                //     height: 40,
-                //     alignment: Alignment.center,
-                //     decoration: BoxDecoration(
-                //       color: alertsAndColors.lightPink,
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: InkWell(
-                //       onTap: (){
-                //      setState((){
-                //        // statusUpdate();
-                //      });
-                //       },
-                //       child: Text('UPDATE',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.white,fontSize: 18)),
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(height: 20,),
-              ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical:10),
+                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    color: Colors.grey[300],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                            Text('STATUS',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
+                        SizedBox(height: 3,),
+                        Container(
+                          height: 1,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(height: 5,),
+
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                          Text(StatusUpdate.toUpperCase(),style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.grey),),
+                                (Status == 'Delivered'||Status=='Cancelled')?Container():Container(
+                                  // padding: EdgeInsets.only(right: 15,bottom: 10),
+                                  width: 25,
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.grey[200]
+                                  ),
+                                  child:InkWell(
+                                    onTap: (){
+                                      showDialog(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          builder: (context)=>
+                                      AlertDialog(
+                                          content:Container(
+                                            height: 140,
+                                            child: Column(
+                                              children: [
+                                                Text('Status :',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Container(
+                                                  height: 1,
+                                                  color: Colors.grey,
+                                                ),
+                                                SizedBox(height: 10,),
+                                                (Status == 'New'||Status=='Assigned')?
+                                                    Column(
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: (){
+                                                              this.setState(() {
+                                                                StatusUpdate ='Preparing';
+                                                                Update="Pre";
+                                                              });
+                                                              },
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              Text('Preparing',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,),),
+                                                              StatusUpdate =='Preparing'?
+                                                              CircleAvatar(
+                                                                radius: 9,
+                                                                backgroundColor: Colors.green,
+                                                                child: Icon(Icons.done,color: Colors.white,size: 10,),
+                                                              ):Container()
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 10,),
+                                                        InkWell(
+                                                          onTap: (){
+                                                            this.setState(() {
+                                                              StatusUpdate ='Cancelled';
+                                                              Update="Can";
+                                                            });
+                                                          },
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              Text('Cancelled',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,),),
+                                                              StatusUpdate =='Cancelled'?
+                                                              CircleAvatar(
+                                                                radius: 9,
+                                                                backgroundColor: Colors.green,
+                                                                child: Icon(Icons.done,color: Colors.white,size: 10,),
+                                                              ):Container()
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                    :Status == 'Preparing'?
+                                                InkWell(
+                                                  onTap: (){
+                                                    this.setState(() {
+                                                      StatusUpdate ='Delivered';
+                                                      Update="Del";
+                                                    });
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text('Delivered',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,),),
+                                                      StatusUpdate =='Delivered'?
+                                                      CircleAvatar(
+                                                        radius: 9,
+                                                        backgroundColor: Colors.green,
+                                                        child: Icon(Icons.done,color: Colors.white,size: 10,),
+                                                      ):Container()
+                                                    ],
+                                                  ),
+                                                ) :Container(),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    Container(
+                                                      width: 80,
+                                                      height: 30,
+                                                      alignment: Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                        color: alertsAndColors.lightPink,
+                                                        borderRadius: BorderRadius.circular(20),
+                                                      ),
+                                                      child: InkWell(
+                                                        onTap: (){
+                                                          Navigator.pop(context);
+                                                          },
+                                                         child: Text('Cancel',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.white,fontSize: 14),),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Container(
+                                                      width: 80,
+                                                      height: 30,
+                                                      alignment: Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                        color: alertsAndColors.lightPink,
+                                                        borderRadius: BorderRadius.circular(20),
+                                                      ),
+                                                      child: InkWell(
+                                                        onTap: (){
+                                                          statusUpdate();
+                                                          Navigator.pop(context);
+                                                        },
+                                                        child: Text('Save',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.white,fontSize: 14),),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                      )
+                                      )
+                                      );
+                                    },
+
+                                    child:Icon(Icons.keyboard_arrow_down,color: alertsAndColors.lightPink,)) ,
+                                  )
+                        ]
+                        )
+
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  //
+                  // Center(
+                  //   child: Container(
+                  //     width: 200,
+                  //     height: 40,
+                  //     alignment: Alignment.center,
+                  //     decoration: BoxDecoration(
+                  //       color: alertsAndColors.lightPink,
+                  //       borderRadius: BorderRadius.circular(20),
+                  //     ),
+                  //     child: InkWell(
+                  //       onTap: (){
+                  //      setState((){
+                  //        // statusUpdate();
+                  //      });
+                  //       },
+                  //       child: Text('UPDATE',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold,color: Colors.white,fontSize: 18)),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 20,),
+                ],
+              ),
             ),
           ),
         ),

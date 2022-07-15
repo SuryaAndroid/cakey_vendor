@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -296,17 +295,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: TextField(
                     controller: vendorName,
                     style: TextStyle(
+                      // height:5,
                         color: alertsAndColors.darkBlue,
                         fontFamily: "Poppins",
                         fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                      isDense: true,
                       hintText: "Name",
                       label: Text("Your Name *",style: TextStyle(
                         fontFamily: "Poppins"
                       ),),
                       labelStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(width: 1, color: Colors.grey)),
                     ),
                   )
@@ -321,13 +323,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                         hintText: "Name",
                         label: Text("Email *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -339,11 +342,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Stack(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 7),
+                          height: 60,
+                          margin: EdgeInsets.only(top: 2),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey, width: 1),
-                              borderRadius: BorderRadius.circular(15)
+                              borderRadius: BorderRadius.circular(10)
                           ),
                           child:ExpansionTile(
                             title: Text("$gender",style: TextStyle(
@@ -415,13 +419,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense: true,
                         hintText: "Name",
                         label: Text("Date Of Birth *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -433,11 +439,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Stack(
                       children: [
                         Container(
+                          height: 60,
                           margin: EdgeInsets.only(top: 7),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey, width: 1),
-                              borderRadius: BorderRadius.circular(15)
+                              borderRadius: BorderRadius.circular(10)
                           ),
                           child:ExpansionTile(
                             title: Text("$egg",style: TextStyle(
@@ -531,12 +538,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense: true,
                         label: Text("Street *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -557,7 +566,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -572,13 +581,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         hintText: "Name",
                         label: Text("State *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -593,13 +604,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         hintText: "Name",
                         label: Text("Pincode *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -614,13 +627,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         hintText: "Name",
                         label: Text("Phone Number *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -635,13 +650,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         hintText: "Name",
                         label: Text("Alternative Phone Number *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -668,12 +685,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Bank Name *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -688,12 +707,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Branch *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -708,12 +729,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Account Number *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -728,12 +751,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("IFSC Code *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -748,12 +773,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("UPI ID/Number *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -779,12 +806,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Aadhar Number *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -799,12 +828,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("PAN Number *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -819,12 +850,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("FSSAI Number *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -839,12 +872,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("FSSAI Expiry Date *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -859,12 +894,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("GST Number *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -963,12 +1000,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Years Of Experience As Bake *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -983,12 +1022,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Maximum Cakes Per Day *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -1003,12 +1044,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Maximum Cakes Per Week *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -1024,13 +1067,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Specialized In *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         alignLabelWithHint: true,
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -1045,12 +1090,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Preferred Vendor Name *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )
@@ -1066,13 +1113,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontFamily: "Poppins",
                           fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        isDense:true,
                         label: Text("Description *",style: TextStyle(
                             fontFamily: "Poppins"
                         ),),
                         alignLabelWithHint: true,
                         labelStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(width: 1, color: Colors.grey)),
                       ),
                     )

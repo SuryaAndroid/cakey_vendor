@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cakey_vendor/ContextClass.dart';
+import 'package:cakey_vendor/Screens/CustomizeDetails.dart';
+import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +32,8 @@ class _CusPriceInfoState extends State<CusPriceInfo> {
   var priceCtrl = new TextEditingController();
   var taxCtrl = new TextEditingController();
   var discountCtrl = new TextEditingController();
+  var weightCtrl = new TextEditingController();
+  var shapetCtrl = new TextEditingController();
 
   //Strings
   String authToken= "";
@@ -98,6 +102,8 @@ class _CusPriceInfoState extends State<CusPriceInfo> {
   String PaymentStatus =    '';
   String Created_On =  '',Status='',EggOrEggless='',Total='',MessageOntheCake='',Id='';
   String StatusUpdate ='', Update='',_id='',CustomizeCake='';
+  String profileUrl='';
+  int weightIndex=0;
 
 double FinalPrice=0.0;
 double Finalgst=0.0;
@@ -106,7 +112,7 @@ double FinalExtracharge=0.0;
 double TotalPrice=0.0;
 double FinalDiscount=0.0;
 double Priceperkg=0.0;
-
+String dropdownWeight = '5.5kg';
 
   Future<void> getInitialPrefs() async{
     var pref = await SharedPreferences.getInstance();
@@ -141,6 +147,9 @@ double Priceperkg=0.0;
       CustomizeCake = pref.getString("Cus_CustomizeCake")??"n";
       Status =   pref.getString("Cus_Status")??"null";
       ItemCount =   pref.getString("Cus_ItemCount")??"null";
+
+      // dropdownWeight=Weight;
+      // print(Weight);
     });
   }
 
@@ -192,6 +201,10 @@ double Priceperkg=0.0;
             SnackBar(content: Text('Price updated!'),backgroundColor: Colors.green,)
         );
         Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context)=>CustomizeDetails(flavour: flavour))
+        );
       }else {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -249,6 +262,8 @@ double Priceperkg=0.0;
           currentVendorStreet = myVendorList[0]["Address"]['Street'].toString();
           currentVendorState = myVendorList[0]["Address"]['State'].toString();
           currentVendorPin= myVendorList[0]["Address"]['Pincode'].toString();
+          profileUrl = myVendorList[0]['ProfileImage'];
+
 
         });
 
@@ -350,7 +365,7 @@ double Priceperkg=0.0;
                               children: [
                                 Text('₹',style: TextStyle(fontSize: 10,color: Colors.grey),),
                                 SizedBox(width: 3,),
-                                Text(priceCtrl.text.toString(),style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
+                                Text('$Priceperkg',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
                               ],
                             )
                           ],
@@ -406,7 +421,7 @@ double Priceperkg=0.0;
                               children: [
                                 Text('-',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
                                 SizedBox(width: 5,),
-                                Text('$Finalsgst',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
+                                Text('$FinalDiscount',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
                               ],
                             )
                           ],
@@ -419,7 +434,13 @@ double Priceperkg=0.0;
                           children: [
                             Text('Bill Total',style: TextStyle(fontFamily: "Poppins",color: Colors.grey,fontWeight: FontWeight.bold),),
                             SizedBox(width: 20,),
-                            Text('$TotalPrice',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),)
+                            Row(
+                              children: [
+                                Text('₹',style: TextStyle(fontSize: 10,color: Colors.grey),),
+                                SizedBox(width: 3,),
+                                Text('$TotalPrice',style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold),),
+                              ],
+                            )
                           ],
                         ),
                         SizedBox(height: 10,),
@@ -472,8 +493,11 @@ double Priceperkg=0.0;
 
 
       setState((){
+        List FlavourList =[];
         for(int i = 0 ; i<flavour.length;i++){
           fixedFlavList.add(flavour[i]);
+          fixedFlavList.toSet().toList();
+          // fixedFlavList.add(flavour[i]);
         }
         spareFlavList = myFlavList;
         spareFlavList = spareFlavList.reversed.toList();
@@ -568,10 +592,12 @@ double Priceperkg=0.0;
     Future.delayed(Duration.zero ,() async{
       getEditData();
       getInitialPrefs();
-      print(VendorName);
-      print(VendorPhoneNumber1);
-      print(VendorPhoneNumber2);
-      print(VendorAddress);
+      // print(VendorName);
+      // print(VendorPhoneNumber1);
+      // print(VendorPhoneNumber2);
+      // print(VendorAddress);
+      print('BVHKL');
+      print(spareWeightList);
     });
     super.initState();
   }
@@ -629,7 +655,12 @@ double Priceperkg=0.0;
                         alignment: Alignment.center,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)=>ProfileScreen())
+                              );
+                            },
                             child: Container(
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
@@ -671,17 +702,22 @@ double Priceperkg=0.0;
                           ],
                         ),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>ProfileScreen())
+                            );
+                          },
                           child:
-                          // profileUrl != "null"
-                          //     ? CircleAvatar(
-                          //   radius: 14.7,
-                          //   backgroundColor: Colors.white,
-                          //   child: CircleAvatar(
-                          //       radius: 13,
-                          //       backgroundImage:
-                          //       NetworkImage("$profileUrl")),
-                          // ) :
+                          profileUrl != "null"
+                              ? CircleAvatar(
+                            radius: 14.7,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                                radius: 13,
+                                backgroundImage:
+                                NetworkImage("$profileUrl")),
+                          ) :
                           CircleAvatar(
                             radius: 14.7,
                             backgroundColor: Colors.white,
@@ -708,25 +744,23 @@ double Priceperkg=0.0;
         margin: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: EdgeInsets.only(top: 5),
-                child: Stack(
-                  children: [
-                    Container(
-                      height:65,
-                      margin:EdgeInsets.only(top: 3),
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey , width: 1),
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 5,),
-                          Row(
+                child: Row(
                             children: [
+                              SizedBox(width: 10,),
+                              Container(
+                                child: Text(
+                                  "Price (₹)",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      backgroundColor: Colors.white
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 50,),
                               Expanded(
                                   flex: 4,
                                   child: Container(
@@ -744,39 +778,8 @@ double Priceperkg=0.0;
                                       ),
                                     ),
                                   )),
-                              SizedBox(width: 6,),
-                              Expanded(child: Container(
-                                child: RaisedButton(
-                                  color: Colors.green,
-                                  onPressed: (){
-                                    // if(extraShapeCtrl.text.isNotEmpty){
-                                    //   addExtraShape(extraShapeCtrl.text);
-                                    // }
-                                    print(priceCtrl.text.toString());
-                                  },
-                                  child: Text("ADD" , style: TextStyle(
-                                      color: Colors.white
-                                  ),),
-                                ),
-                              ))
                             ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                        left: 12,
-                        top: -5,
-                        child: Text(
-                          "Price",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontFamily: "Poppins",
-                              backgroundColor: Colors.white
-                          ),
-                        )
-                    ),
-                  ],
+
                 ),
               ),
 
@@ -785,22 +788,20 @@ double Priceperkg=0.0;
               ),
               Container(
                 padding: EdgeInsets.only(top: 5),
-                child: Stack(
-                  children: [
-                    Container(
-                      height:65,
-                      margin:EdgeInsets.only(top: 3),
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey , width: 1),
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 5,),
-                          Row(
+                 child: Row(
                             children: [
+                              SizedBox(width: 10,),
+                              Container(
+                                child: Text(
+                                  "Tax ( % )",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: "Poppins",
+                                      backgroundColor: Colors.white
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 45,),
                               Expanded(
                                   flex: 4,
                                   child: Container(
@@ -818,40 +819,8 @@ double Priceperkg=0.0;
                                       ),
                                     ),
                                   )),
-                              SizedBox(width: 6,),
-                              Expanded(child: Container(
-                                child: RaisedButton(
-                                  color: Colors.green,
-                                  onPressed: (){
-                                    // if(extraShapeCtrl.text.isNotEmpty){
-                                    //   addExtraShape(extraShapeCtrl.text);
-                                    // }
-                                    print(taxCtrl.text.toString());
-                                  },
-                                  child: Text("ADD" , style: TextStyle(
-                                      color: Colors.white
-                                  ),),
-                                ),
-                              ))
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                        left: 12,
-                        top: -5,
-                        child: Text(
-                          "Tax ( % )",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontFamily: "Poppins",
-                              backgroundColor: Colors.white
-                          ),
-                        )
-                    ),
-                  ],
-                ),
               ),
 
               SizedBox(
@@ -859,22 +828,20 @@ double Priceperkg=0.0;
               ),
               Container(
                 padding: EdgeInsets.only(top: 5),
-                child: Stack(
-                  children: [
-                    Container(
-                      height:65,
-                      margin:EdgeInsets.only(top: 3),
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey , width: 1),
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 5,),
-                          Row(
+                child: Row(
                             children: [
+                              SizedBox(width: 10,),
+                              Container(
+                                child:Text(
+                                  "Discount ( % )",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: "Poppins",
+                                        backgroundColor: Colors.white
+                                    ),
+                                  )
+                                  ),
+                              SizedBox(width: 10,),
                               Expanded(
                                   flex: 4,
                                   child: Container(
@@ -892,41 +859,9 @@ double Priceperkg=0.0;
                                       ),
                                     ),
                                   )),
-                              SizedBox(width: 6,),
-                              Expanded(child: Container(
-                                child: RaisedButton(
-                                  color: Colors.green,
-                                  onPressed: (){
-                                    // if(extraShapeCtrl.text.isNotEmpty){
-                                    //   addExtraShape(extraShapeCtrl.text);
-                                    // }
-                                    print(discountCtrl.text.toString());
-                                  },
-                                  child: Text("ADD" , style: TextStyle(
-                                      color: Colors.white
-                                  ),),
-                                ),
-                              ))
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                        left: 12,
-                        top: -5,
-                        child: Text(
-                          "Discount ( % )",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontFamily: "Poppins",
-                              backgroundColor: Colors.white
-                          ),
-                        )
-                    ),
-                  ],
                 ),
-              ),
 
 
               SizedBox(height: 5,),
@@ -994,7 +929,11 @@ double Priceperkg=0.0;
                                                             ==spareFlavList[i]['Name']);
                                                         flavEditors[i].text = "";
                                                         isFlavTapped[i]=false;
-                                                        print(fixedFlavList);
+                                                        print('fixedFlavList');
+                                                       var  FlavsList=[...{...fixedFlavList}];
+                                                        print(FlavsList);
+                                                        print(fixedFlavList.toSet().toList());
+
                                                       }else{
                                                         flavEditors[i].text = "";
                                                         isFlavTapped[i]=false;
@@ -1020,12 +959,18 @@ double Priceperkg=0.0;
                                                 height: 30,
                                                 width:45,
                                                 child: TextField(
+                                                  maxLength: 3,
                                                   keyboardType: TextInputType.phone,
                                                   controller: flavEditors[i],
                                                   onEditingComplete: (){
                                                     print("Completed...");
                                                     setState((){
-                                                      if(flavEditors[i].text.isNotEmpty){
+                                                      if(fixedFlavList.contains({
+                                                        "Name":'${spareFlavList[i]['Name']}',
+                                                        "Price":'${flavEditors[i].text}',
+                                                      })&&flavEditors[i].text.isEmpty){
+
+                                                      } else{
                                                         fixedFlavList.add(
                                                             {
                                                               "Name":'${spareFlavList[i]['Name']}',
@@ -1034,12 +979,19 @@ double Priceperkg=0.0;
                                                         );
                                                       }
                                                     });
-                                                    print(fixedFlavList.toSet().toList());
+                                                    //REMOVE DUPLICATE
+                                                    final jsonList = fixedFlavList.map((item) => jsonEncode(item)).toList();
+                                                   final uniqueJsonList = jsonList.toSet().toList();
+                                                    fixedFlavList = uniqueJsonList.map((item) => jsonDecode(item)).toList();
+                                                    print(fixedFlavList);
+                                                    //
+
                                                   },
                                                   onSubmitted: (e){
                                                     FocusScope.of(context).unfocus();
                                                   },
                                                   decoration: InputDecoration(
+                                                      counterText: "",
                                                       border: OutlineInputBorder(
                                                         borderRadius: BorderRadius.circular(10),
                                                       ),
@@ -1076,10 +1028,122 @@ double Priceperkg=0.0;
                   ),
                 ],
               ),
+              SizedBox(height: 10,),
 
-
+              Text('Weight',style: TextStyle(fontFamily: "Poppins",color: alertsAndColors.darkBlue,fontWeight: FontWeight.bold,fontSize: 17),),
+              SizedBox(height: 10,),
+              Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 (Weight=='')?Container():InkWell(
+                   onTap: (){
+                     // Weight='';
+                     // print(Weight);
+                   },
+                   child: Container(
+                     margin: EdgeInsets.symmetric(horizontal: 5),
+                     padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                     decoration: BoxDecoration(
+                       borderRadius: BorderRadius.circular(30),
+                       color: Colors.grey[300],
+                     ),
+                     child: Row(
+                       crossAxisAlignment: CrossAxisAlignment.center,
+                       mainAxisSize: MainAxisSize.min,
+                       children: [
+                         Text(Weight, style: TextStyle(
+                             color: alertsAndColors.darkBlue,
+                             fontFamily: "Poppins"
+                         ),),
+                         SizedBox(width: 3,),
+                         Icon(Icons.check_circle , size: 18,color: Colors.green,)
+                       ],
+                     ),
+                   ),
+                 ),
+                 Container(
+                   height: 30,
+                   width:45,
+                   child: TextField(
+                     maxLength: 2,
+                     keyboardType: TextInputType.phone,
+                     controller: weightCtrl,
+                     onEditingComplete: (){
+                       double dweight =double.parse(weightCtrl.text.toString());
+                       Weight = '$dweight';
+                     },
+                     onSubmitted: (e){
+                       FocusScope.of(context).unfocus();
+                     },
+                     decoration: InputDecoration(
+                         counterText: "",
+                         border: OutlineInputBorder(
+                           borderRadius: BorderRadius.circular(10),
+                         ),
+                         contentPadding: EdgeInsets.only(left: 6)
+                     ),
+                   ),
+                 )
+               ],
+             ),
 
               SizedBox(height: 10,),
+
+              Text('Shape',style: TextStyle(fontFamily: "Poppins",color: alertsAndColors.darkBlue,fontWeight: FontWeight.bold,fontSize: 17),),
+              SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  (Shape=='')?Container():InkWell(
+                    onTap: (){
+                      // Shape='';
+                      // print(Shape);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.grey[300],
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(Shape, style: TextStyle(
+                              color: alertsAndColors.darkBlue,
+                              fontFamily: "Poppins"
+                          ),),
+                          SizedBox(width: 3,),
+                          Icon(Icons.check_circle , size: 18,color: Colors.green,)
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 30,
+                    width:70,
+                    child: TextField(
+                      maxLength: 10,
+                      keyboardType: TextInputType.text,
+                      controller: shapetCtrl,
+                      onEditingComplete: (){
+                        Shape = shapetCtrl.text.toString();
+                      },
+                      onSubmitted: (e){
+                        FocusScope.of(context).unfocus();
+                      },
+                      decoration: InputDecoration(
+                          counterText: "",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: EdgeInsets.only(left: 6)
+                      ),
+                    ),
+                  )
+                ],
+              ),
 
 
               Center(
@@ -1092,44 +1156,55 @@ double Priceperkg=0.0;
                   child: InkWell(
                     onTap: (){
                       setState((){
+                        if(priceCtrl.text.toString().isEmpty||taxCtrl.text.toString().isEmpty||discountCtrl.text.toString().isEmpty){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Please Fill All Details"),
+                                behavior: SnackBarBehavior.floating,
+                              )
+                          );
+                        }else{
 
-                        FinalExtracharge=0.0;
-                        for(int i=0;i<fixedFlavList.length;i++){
-                          FinalExtracharge=FinalExtracharge+double.parse(fixedFlavList[i]['Price']);
-                        }
+                          FinalExtracharge=0.0;
+                          for(int i=0;i<fixedFlavList.length;i++){
+                            FinalExtracharge=FinalExtracharge+double.parse(fixedFlavList[i]['Price']);
+                          }
 
-                        print(FinalExtracharge);
-                        var weight= Weight.toString().split('').first;
-                        double dweight =double.parse(weight);
-                         Priceperkg = double.parse(priceCtrl.text.toString());
-                        double ddiscount = double.parse(discountCtrl.text.toString());
-                        double dtax = double.parse(taxCtrl.text.toString());
-                        double priceweight = dweight*Priceperkg;
-                        FinalDiscount = (priceweight * ddiscount / 100);
-                        double tax = (priceweight * dtax)/100;
-                            Finalgst = tax/2;
-                            Finalsgst = tax/2;
-                            print('weight...'   + '$dweight');
-                            print('price per kg...'   + '$Priceperkg');
-                            print('Discount...'   + '$ddiscount');
-                            print('tax...     '   +  '$dtax');
-                            print('extra charge...   '   + '$FinalExtracharge');
-                            print('gst...'+'$Finalgst');
-                            print('sgst...'+'$Finalsgst');
+                          print(FinalExtracharge);
+                          var weight= Weight.toString().split('').first;
+                          double dweight =double.parse(weight);
+                          Priceperkg = double.parse(priceCtrl.text.toString());
+                          double ddiscount = double.parse(discountCtrl.text.toString());
+                          double dtax = double.parse(taxCtrl.text.toString());
+                          double priceweight = dweight*Priceperkg;
+                          FinalDiscount = (priceweight * ddiscount / 100);
+                          double tax = (priceweight * dtax)/100;
+                          Finalgst = tax/2;
+                          Finalsgst = tax/2;
+                          print('weight...'   + '$dweight');
+                          print('price per kg...'   + '$Priceperkg');
+                          print('Discount...'   + '$ddiscount');
+                          print('tax...     '   +  '$dtax');
+                          print('extra charge...   '   + '$FinalExtracharge');
+                          print('gst...'+'$Finalgst');
+                          print('sgst...'+'$Finalsgst');
+                          print(FinalDiscount);
 
-                        double Addedprice = (priceweight+FinalExtracharge);
-                         TotalPrice = (Addedprice+tax)-FinalDiscount;
+                          double Addedprice = (priceweight+FinalExtracharge);
+                          TotalPrice = (Addedprice+tax)-FinalDiscount;
                           print('TOTAL....' +"$TotalPrice");
 
-                        // addedPrice  = (((price*weights)+extra)*itemCount);
-                        // finalPrice = (addedPrice + tax + delCharge)-discountedPrice;
-                        confiromPrice(context);
+                          // addedPrice  = (((price*weights)+extra)*itemCount);
+                          // finalPrice = (addedPrice + tax + delCharge)-discountedPrice;
+                          confiromPrice(context);
+                        }
+
                       });
                     },
                     child: Text('CONFIRM PRICE',style: TextStyle(color: Colors.white,fontFamily: "Poppins",fontWeight: FontWeight.bold),),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

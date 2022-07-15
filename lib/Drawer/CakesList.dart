@@ -222,6 +222,24 @@ class _CakesListState extends State<CakesList> {
     }
 
 
+
+    if(filteredCakeList[i]['CakeType'] == null||filteredCakeList[i]['CakeType']=='Null'){
+      pref.setString("CakeType", 'Cake Type');
+    }else{
+      pref.setString("CakeType", filteredCakeList[i]['CakeType']);
+    }
+    if(filteredCakeList[i]['CakeSubType'] == null||filteredCakeList[i]['CakeSubType']=='Null'){
+      pref.setString("CakeSubType", 'Cake SubType');
+    }else{
+      pref.setString("CakeSubType", filteredCakeList[i]['CakeSubType']);
+    }
+
+    if(filteredCakeList[i]['BasicEgglessCostPerKg'] == null||filteredCakeList[i]['BasicEgglessCostPerKg']=='Null'){
+      pref.setString("BasicEgglessCostPerKg", '100');
+    }else{
+      pref.setString("BasicEgglessCostPerKg", filteredCakeList[i]['BasicEgglessCostPerKg']);
+    }
+
     pref.remove("cakeName");
     pref.remove("cakeImage");
     pref.remove("cakePrice");
@@ -246,6 +264,25 @@ class _CakesListState extends State<CakesList> {
     pref.setString("cakeId", filteredCakeList[i]['Id']);
     pref.setString("cakeTierPoss", filteredCakeList[i]['IsTierCakePossible']);
     pref.setString("cakeCustomPoss", filteredCakeList[i]['BasicCustomisationPossible']);
+    pref.setString("CakeCommonName", filteredCakeList[i]['CakeCommonName']);
+    pref.setString("IsEgglessOptionAvailable", filteredCakeList[i]['IsEgglessOptionAvailable']);
+    pref.setString("Discount", filteredCakeList[i]['Discount'].toString());
+    pref.setString("Tax", filteredCakeList[i]['Tax'].toString());
+    pref.setString("Created_On", filteredCakeList[i]['Created_On']);
+    pref.setString("MinTimeForDeliveryOfDefaultCake", filteredCakeList[i]['MinTimeForDeliveryOfDefaultCake']);
+    pref.setString("CakeBase", filteredCakeList[i]['CakeBase']);
+    pref.setString("CakeCream", filteredCakeList[i]['CakeCream']);
+    pref.setString("BestUsedBefore", filteredCakeList[i]['BestUsedBefore']);
+    pref.setString("ToBeStoredIn", filteredCakeList[i]['ToBeStoredIn']);
+    pref.setString("ThemeCakePossible", filteredCakeList[i]['ThemeCakePossible']);
+    pref.setString("ToppersPossible", filteredCakeList[i]['ToppersPossible']);
+    pref.setString("FullCustomisationPossible", filteredCakeList[i]['FullCustomisationPossible']);
+    pref.setString("HowGoodAreYouWithTheCake", filteredCakeList[i]['HowGoodAreYouWithTheCake']);
+    pref.setString("HowManyTimesHaveYouBakedThisParticularCake", filteredCakeList[i]['HowManyTimesHaveYouBakedThisParticularCake']);
+    pref.setString("IsTierCakePossible", filteredCakeList[i]['IsTierCakePossible']);
+    pref.setString("Stock", filteredCakeList[i]['Stock']);
+    pref.setString("keeproomtemp", filteredCakeList[i]['KeepTheCakeInRoomTemperature']);
+
 
     pref.setStringList("cakeImages", shareImg);
     pref.setStringList("cakeWeight", shareWeight);
@@ -255,7 +292,7 @@ class _CakesListState extends State<CakesList> {
         MaterialPageRoute(builder: (context)=>CakeDetails(
           flavours: flavs,
           shapes: shapes,
-          tiers: tiers,
+          tiers: tiers
         ))
     );
 

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cakey_vendor/ContextClass.dart';
+import 'package:cakey_vendor/Screens/NotificationScreen.dart';
+import 'package:cakey_vendor/Screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +31,7 @@ class _EditCakeState extends State<EditCake> {
   //common
   AlertsAndColors alertsAndColors = new AlertsAndColors();
   var drawerKey = GlobalKey<ScaffoldState>();
-
+  String profileUrl='';
   //controllers
   var cakePrice = new TextEditingController(text: "200");
   var extraShapeCtrl = new TextEditingController();
@@ -540,7 +542,12 @@ class _EditCakeState extends State<EditCake> {
                         alignment: Alignment.center,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context)=>NotificationScreen())
+                              );
+                            },
                             child: Container(
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
@@ -582,17 +589,22 @@ class _EditCakeState extends State<EditCake> {
                           ],
                         ),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>ProfileScreen())
+                            );
+                          },
                           child:
-                          // profileUrl != "null"
-                          //     ? CircleAvatar(
-                          //   radius: 14.7,
-                          //   backgroundColor: Colors.white,
-                          //   child: CircleAvatar(
-                          //       radius: 13,
-                          //       backgroundImage:
-                          //       NetworkImage("$profileUrl")),
-                          // ) :
+                          profileUrl != "null"
+                              ? CircleAvatar(
+                            radius: 14.7,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                                radius: 13,
+                                backgroundImage:
+                                NetworkImage("$profileUrl")),
+                          ) :
                           CircleAvatar(
                             radius: 14.7,
                             backgroundColor: Colors.white,
@@ -629,10 +641,10 @@ class _EditCakeState extends State<EditCake> {
                     Container(
                       margin: EdgeInsets.only(top: 7),
                       width: double.infinity,
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey, width: 1),
-                          borderRadius: BorderRadius.circular(15)
+                          borderRadius: BorderRadius.circular(10)
                       ),
                       child: Text("$cakeName",
                         style: TextStyle(
@@ -666,11 +678,13 @@ class _EditCakeState extends State<EditCake> {
                     fontFamily: "Poppins",
                     fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                  isDense:true,
                   hintText: "Cake Price",
                   label: Text("Cake Price"),
                   labelStyle: TextStyle(color: Colors.grey),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(width: 1, color: Colors.grey)
                   ),
                 ),
@@ -692,7 +706,7 @@ class _EditCakeState extends State<EditCake> {
                       padding: EdgeInsets.only(left: 10,right: 10),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey, width: 1),
-                        borderRadius: BorderRadius.circular(15)
+                        borderRadius: BorderRadius.circular(10)
                       ),
                       child: DropdownButton(
                           value: "$stocks",
@@ -989,13 +1003,13 @@ class _EditCakeState extends State<EditCake> {
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                      height: 55,
+                      height: 45,
                       margin: EdgeInsets.only(top: 7),
                       width: double.infinity,
                       padding: EdgeInsets.only(left: 10,right: 10),
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey, width: 1),
-                          borderRadius: BorderRadius.circular(15)
+                          borderRadius: BorderRadius.circular(10)
                       ),
                       // child: DropdownButton(
                       //     value: "$basicCus",
@@ -1049,7 +1063,7 @@ class _EditCakeState extends State<EditCake> {
                           padding: EdgeInsets.all(7),
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey , width: 1),
-                              borderRadius: BorderRadius.circular(15)
+                              borderRadius: BorderRadius.circular(10)
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1174,7 +1188,13 @@ class _EditCakeState extends State<EditCake> {
                                                         );
                                                       }
                                                     });
-                                                    print(fixedFlavList.toSet().toList());
+                                                    //REMOVE DUPLICATE
+                                                    final jsonList = fixedFlavList.map((item) => jsonEncode(item)).toList();
+                                                    final uniqueJsonList = jsonList.toSet().toList();
+                                                    fixedFlavList = uniqueJsonList.map((item) => jsonDecode(item)).toList();
+                                                    print(fixedFlavList);
+                                                    //
+                                                    // print(fixedFlavList.toSet().toList());
                                                   },
                                                   onSubmitted: (e){
                                                     FocusScope.of(context).unfocus();
@@ -1231,7 +1251,7 @@ class _EditCakeState extends State<EditCake> {
                           padding: EdgeInsets.all(7),
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey , width: 1),
-                              borderRadius: BorderRadius.circular(15)
+                              borderRadius: BorderRadius.circular(10)
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1365,7 +1385,13 @@ class _EditCakeState extends State<EditCake> {
                                                         );
                                                       }
                                                     });
-                                                    print(fixedShapeList.toSet().toList());
+                                                    //REMOVE DUPLICATE
+                                                    final jsonList = fixedShapeList.map((item) => jsonEncode(item)).toList();
+                                                    final uniqueJsonList = jsonList.toSet().toList();
+                                                    fixedShapeList = uniqueJsonList.map((item) => jsonDecode(item)).toList();
+                                                    print(fixedShapeList);
+                                                    //
+                                                    // print(fixedShapeList.toSet().toList());
                                                   },
                                                   onSubmitted: (e){
                                                     FocusScope.of(context).unfocus();
@@ -1433,7 +1459,7 @@ class _EditCakeState extends State<EditCake> {
                                   Expanded(
                                       flex: 4,
                                       child: Container(
-                                        height: 45,
+                                        height: 40,
                                         child: TextField(
                                           controller: extraShapeCtrl,
                                           decoration: InputDecoration(
@@ -1528,6 +1554,12 @@ class _EditCakeState extends State<EditCake> {
                                                   fixedWeightList.add(
                                                      '${spareWeightList[i]['Weight']}',
                                                   );
+                                                  //REMOVE DUPLICATE
+                                                  final jsonList = fixedWeightList.map((item) => jsonEncode(item)).toList();
+                                                  final uniqueJsonList = jsonList.toSet().toList();
+                                                  fixedWeightList = uniqueJsonList.map((item) => jsonDecode(item)).toList();
+                                                  print(fixedWeightList);
+                                                  //
                                                 }),
                                                 child: Icon(Icons.add_circle , color: Colors.green,),
                                               ):Container()
@@ -1589,9 +1621,11 @@ class _EditCakeState extends State<EditCake> {
                             });
                           },
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            isDense:true,
                             hintText: "Min Time For Delivery Of 3Kg Cake",
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(width: 1, color: Colors.grey)),
                           ),
                         ),
@@ -1603,10 +1637,10 @@ class _EditCakeState extends State<EditCake> {
                             child: Container(
                               alignment: Alignment.center,
                               padding: EdgeInsets.only(left:5 , right: 5),
-                              height: 60,
+                              height: 40,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey , width: 1),
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
                                 "${threekgCtrl.text} $threekgHourorMin",
@@ -1668,9 +1702,11 @@ class _EditCakeState extends State<EditCake> {
                             });
                           },
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            isDense:true,
                             hintText: "Min Time For Delivery Of 5Kg Cake",
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(width: 1, color: Colors.grey)),
                           ),
                         ),
@@ -1682,10 +1718,10 @@ class _EditCakeState extends State<EditCake> {
                             child: Container(
                               alignment: Alignment.center,
                               padding: EdgeInsets.only(left:5 , right: 5),
-                              height: 60,
+                              height: 40,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey , width: 1),
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
                                 "${fvkgCtrl.text} $fvkgHourorMin",
