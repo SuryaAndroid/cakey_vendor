@@ -26,10 +26,6 @@ class _SplashScreenState extends State<MainScreen> {
   String authToken = "";
 
   Future<void> updateLogSession() async{
-    var pr = await SharedPreferences.getInstance();
-    setState((){
-      authToken = pr.getString("authToken")??"";
-    });
     var headers = {
       'Content-Type': 'application/json'
     };
@@ -44,25 +40,46 @@ class _SplashScreenState extends State<MainScreen> {
 
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Updated...")));
     }
     else {
       print(response.reasonPhrase);
     }
-
   }
 
   @override
   void initState(){
     timer = Timer.periodic(Duration(seconds: 60), (timer) {
-      updateLogSession();
+      getToken();
       print(simplyFormat(time:DateTime.now() , dateOnly: false));
     });
     super.initState();
   }
 
+  Future<void> getToken() async{
+    var pr = await SharedPreferences.getInstance();
+
+    setState((){
+      authToken = pr.getString("authToken")??"";
+    });
+
+    if(authToken!=null || authToken!="null" || authToken.isNotEmpty){
+      updateLogSession();
+    }
+
+    print("auth token in main.dart : $authToken");
+  }
+
+  //rm token
+  Future<void> removeToken() async{
+    var prefs = await SharedPreferences.getInstance();
+    prefs.remove("authToken");
+  }
+
   @override
   void dispose(){
     timer.cancel();
+    removeToken();
     super.dispose();
   }
 

@@ -499,7 +499,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                                 )),
                           )),
                       Positioned(
-                          top: 200,
+                          top: 150,
                           left: 15,
                           child: Container(
                             decoration: BoxDecoration(
@@ -546,7 +546,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
 
                       Positioned(
                           left: 10,
-                          top: 240,
+                          top: 200,
                           child:   Container(
                             // margin: EdgeInsets.symmetric(horizontal: 10),
                             child: Column(
@@ -563,8 +563,8 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                             ),
                           )),
                       Positioned(
-                        left: 265,
-                        top: 205,
+                        right: 10,
+                        top: 150,
                         child: Column(
                           children: [
                             Container(
@@ -812,7 +812,8 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  (Status == 'Sent')?Container():
+                  (Status == 'Sent'||Status == 'Cancelled')?
+                  Container():
                   Center(
                     child: Container(
                       width: 200,

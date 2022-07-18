@@ -20,7 +20,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   String authToken = "";
   String authMail = "";
   String vendorId = "";
-
   List newOrders = [];
 
   //get prefs

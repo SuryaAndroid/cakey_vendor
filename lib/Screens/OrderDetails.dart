@@ -515,30 +515,8 @@ class _OrderDetailState extends State<OrderDetail> {
                                   bottomLeft: const Radius.circular(100.0),
                                 )),
                           )),
-                      // Positioned(
-                      //     right: 20,
-                      //     top: 17,
-                      //     child: Container(
-                      //       // padding: EdgeInsets.all(8),
-                      //       padding:
-                      //           EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                      //       decoration: BoxDecoration(
-                      //           borderRadius: BorderRadius.circular(25),
-                      //           color: Colors.white),
-                      //       child: InkWell(
-                      //         onTap: () {},
-                      //         child: Text(
-                      //           'EDIT',
-                      //           style: TextStyle(
-                      //               color: Colors.orange,
-                      //               fontSize: 12,
-                      //               fontFamily: "Poppins",
-                      //               fontWeight: FontWeight.bold),
-                      //         ),
-                      //       ),
-                      //     )),
                       Positioned(
-                          top: 200,
+                          top: 150,
                           left: 15,
                           child: Container(
                               decoration: BoxDecoration(
@@ -585,7 +563,7 @@ class _OrderDetailState extends State<OrderDetail> {
 
                       Positioned(
                           left: 10,
-                          top: 240,
+                          top: 200,
                           child:   Container(
                         // margin: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
@@ -602,8 +580,8 @@ class _OrderDetailState extends State<OrderDetail> {
                         ),
                       )),
                       Positioned(
-                          left: 265,
-                          top: 205,
+                          right: 8,
+                          top: 150,
                           child: Column(
                             children: [
                               Container(
