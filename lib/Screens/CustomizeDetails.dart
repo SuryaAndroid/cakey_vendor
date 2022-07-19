@@ -396,6 +396,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Stack(
+                    fit: StackFit.loose,
                     children: [
                       Column(
                         children: [
@@ -404,21 +405,23 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height * 0.27,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.grey),
-                              child: Image(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage( CakeImage ==null? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyzg66tQkRI0ouITaVRkQOhM3lmOLuYoCkVg&usqp=CAU'
-                                      :CakeImage))),
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.grey,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(CakeImage == null
+                                          ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyzg66tQkRI0ouITaVRkQOhM3lmOLuYoCkVg&usqp=CAU'
+                                          : CakeImage))
+                              ),),
                           SizedBox(
                             height: 60,
                           ),
                         ],
                       ),
-                      Positioned(
-                          top: 15,
-                          left: 3,
+                      Align(
+                          alignment: Alignment.topLeft,
                           child:Status=='New'? Container(
+                            margin: EdgeInsets.only(left: 3, top: 15),
                             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
                             decoration: BoxDecoration(
                                 color: alertsAndColors.lightPink,
@@ -431,6 +434,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                           )
                               :Status=='Ordered'?
                           Container(
+                            margin: EdgeInsets.only(left: 3, top: 15),
                             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
                             decoration: BoxDecoration(
                                 color:Color(0XFF6b55bd),
@@ -442,6 +446,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                             child: Text('Ordered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
                           ):Status=='Delivered'?
                           Container(
+                            margin: EdgeInsets.only(left: 3, top: 15),
                             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
                             decoration: BoxDecoration(
                                 color: Colors.green,
@@ -453,6 +458,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                             child: Text('Delivered',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
                           ):Status=='Cancelled'?
                           Container(
+                            margin: EdgeInsets.only(left: 3, top: 15),
                             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
                             decoration: BoxDecoration(
                                 color: Colors.red,
@@ -464,6 +470,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                             child: Text('Cancelled',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
                           ):Status=='Assigned'?
                           Container(
+                            margin: EdgeInsets.only(left: 3, top: 15),
                             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
                             decoration: BoxDecoration(
                                 color: Colors.lightBlue,
@@ -475,6 +482,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                             child: Text('Assigned',style: TextStyle(fontSize: 12,color: Colors.white,fontFamily: "Poppins"),),
                           ):Status=='Sent'?
                           Container(
+                            margin: EdgeInsets.only(left: 3, top: 15),
                             padding: EdgeInsets.symmetric(horizontal: 10,vertical: 1),
                             decoration: BoxDecoration(
                                 color: Colors.green,
@@ -499,72 +507,84 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                                 )),
                           )),
                       Positioned(
-                          top: 150,
-                          left: 15,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 5, right: 5),
-                                child: Container(
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
+                        top: MediaQuery.of(context).size.height * 0.25,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      topRight: Radius.circular(8),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 5, right: 5),
+                                  child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8),
+                                        topRight: Radius.circular(8),
+                                      ),
                                     ),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Transform.rotate(
-                                        angle: 120,
-                                        child: Icon(
-                                          Icons.egg_outlined,
-                                          color: Colors.amber,
-                                        ),
-                                      ),
-                                      Text(
-                                        EggOrEggless ,
-                                        style: TextStyle(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Transform.rotate(
+                                          angle: 120,
+                                          child: Icon(
+                                            Icons.egg_outlined,
                                             color: Colors.amber,
-                                            fontFamily: "Poppins",
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
+                                          ),
+                                        ),
+                                        Text(
+                                          EggOrEggless,
+                                          style: TextStyle(
+                                              color: Colors.amber,
+                                              fontFamily: "Poppins",
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
+                              Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        CakeName == null ? 'CAKE NAME' : CakeName,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        'ID : ' + '$Id',
+                                        style: TextStyle(
+                                            fontSize: 12, fontFamily: "Poppins"),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
 
                       Positioned(
-                          left: 10,
-                          top: 200,
-                          child:   Container(
-                            // margin: EdgeInsets.symmetric(horizontal: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 290,
-                                  child: Text(CakeName==null?'CAKE NAME':CakeName,style: TextStyle(fontSize: 18,fontFamily: "Poppins",fontWeight: FontWeight.bold,),maxLines: 1,),
-                                ),
-                                Container(
-                                  child: Text('ID : ' + '$Id',style: TextStyle(fontSize: 12,fontFamily: "Poppins"),),
-                                )
-                              ],
-                            ),
-                          )),
-                      Positioned(
-                        right: 10,
-                        top: 150,
+                        right: 15,
+                        top: MediaQuery.of(context).size.height * 0.25,
                         child: Column(
                           children: [
                             Container(
@@ -812,7 +832,7 @@ class _CustomizeDetailsState extends State<CustomizeDetails> {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  (Status == 'Sent'||Status == 'Cancelled')?
+                  (Status == 'Sent'||Status == 'Cancelled'||Status=='Ordered')?
                   Container():
                   Center(
                     child: Container(

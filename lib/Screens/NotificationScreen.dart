@@ -4,7 +4,6 @@ import 'package:cakey_vendor/CommonClass/AlertsAndColors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'CustomizeDetails.dart';
 import 'OrderDetails.dart';
 
@@ -21,7 +20,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   String authMail = "";
   String vendorId = "";
   List newOrders = [];
-
+  List newList =[];
   //get prefs
   Future<void> getIniitialPrefs() async{
     var pref = await SharedPreferences.getInstance();
@@ -96,6 +95,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
       setState((){
         newOrders = map.where((element) => element['Status'].toString().toLowerCase()=="new").toList();
         getCustomiseOrders(vendorId);
+        // newOrders.reversed.toList();
+        // print(newOrders);
       });
     }
     else {
@@ -121,10 +122,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
       setState((){
         oldList = map.where((element) => element['Status'].toString().toLowerCase()=="new").toList();
         oldList = oldList + map.where((element) => element['Status'].toString().toLowerCase()=="assigned").toList();
-        oldList = oldList.reversed.toList();
-        newOrders = oldList + newOrders;
-        newOrders.sort((a,b)=>a['Created_On'].toString().compareTo(simplyFormat(time: DateTime.now(),dateOnly: false).toString()));
-        newOrders = newOrders.reversed.toList();
+        // oldList = oldList.reversed.toList();
+        print(oldList);
+        newOrders = newOrders +oldList ;
+        newOrders.sort((a,b)=>a['Created_On'].toString().compareTo(simplyFormat(time: DateTime.now(),dateOnly: false)));
+        print(simplyFormat(time: DateTime.now(),dateOnly: true));
+        // newOrders = newOrders.reversed.toList();
       });
     }
     else {
@@ -696,15 +699,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       fontSize: 13
                                   ),),
                                   SizedBox(height: 10,),
-                                  Text(
-                                    simplyFormat(time: DateTime.now(),dateOnly: true)==
-                                        e['Created_On'].toString().split(" ").first?
-                                    "Today":formateToDay(e['Created_On'].toString().split(" ").first)
-                                    ,style: TextStyle(
-                                      color: alertsAndColors.darkBlue,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold
-                                  ),),
+
+                                      Text(
+                                        simplyFormat(time: DateTime.now(),dateOnly: true)==
+                                            e['Created_On'].toString().split(" ").first?
+                                        "Today":formateToDay(e['Created_On'].toString().split(" ").first)
+                                        ,style: TextStyle(
+                                          color: alertsAndColors.darkBlue,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold
+                                      ),),
+
                                 ],
                               )
                           ),
@@ -796,70 +801,70 @@ String formateToDay(String date){
   return formatedDate;
 }
 
-class GroupedListView<T, E> extends ListView {
-  GroupedListView({
-    required E Function(T element) groupBy,
-    required Widget Function(E value) groupSeparatorBuilder,
-    required Widget Function(BuildContext context, T element) itemBuilder,
-    GroupedListOrder order = GroupedListOrder.ASC,
-    bool sort = true,
-    Widget separator = const Divider(height: 0.0),
-    List<T>? elements,
-    Key? key,
-    Axis scrollDirection = Axis.vertical,
-    ScrollController? controller,
-    bool? primary,
-    ScrollPhysics? physics,
-    bool shrinkWrap = false,
-    EdgeInsetsGeometry? padding,
-    bool addAutomaticKeepAlives = true,
-    bool addRepaintBoundaries = true,
-    bool addSemanticIndexes = true,
-    double? cacheExtent,
-  }) : super.builder(
-    key: key,
-    scrollDirection: scrollDirection,
-    controller: controller,
-    primary: primary,
-    physics: physics,
-    shrinkWrap: shrinkWrap,
-    padding: padding,
-    itemCount: elements!.length * 2,
-    addAutomaticKeepAlives: addAutomaticKeepAlives,
-    addRepaintBoundaries: addRepaintBoundaries,
-    addSemanticIndexes: addSemanticIndexes,
-    cacheExtent: cacheExtent,
-    itemBuilder: (context, index) {
-      int actualIndex = index ~/ 2;
-      if (index.isEven) {
-        E curr = groupBy(elements![actualIndex]);
-        E prev = (actualIndex - 1 < 0
-            ? null
-            : groupBy(elements[actualIndex - 1])) as E;
-
-        if (prev != curr) {
-          return groupSeparatorBuilder(curr);
-        }
-        return Container();
-      }
-      return itemBuilder(context, elements![actualIndex]);
-    },
-  ) {
-    if (sort && elements.isNotEmpty) {
-      if (groupBy(elements[0]) is Comparable) {
-        elements.sort((e1, e2) =>
-            (groupBy(e1) as Comparable).compareTo(groupBy(e2) as Comparable));
-      } else {
-        elements
-            .sort((e1, e2) => ('${groupBy(e1)}').compareTo('${groupBy(e2)}'));
-      }
-      if (order == GroupedListOrder.DESC) {
-        elements = elements.reversed.toList();
-      }
-    }
-  }
-}
-
-enum GroupedListOrder { ASC, DESC }
+// class GroupedListView<T, E> extends ListView {
+//   GroupedListView({
+//     required E Function(T element) groupBy,
+//     required Widget Function(E value) groupSeparatorBuilder,
+//     required Widget Function(BuildContext context, T element) itemBuilder,
+//     GroupedListOrder order = GroupedListOrder.ASC,
+//     bool sort = true,
+//     Widget separator = const Divider(height: 0.0),
+//     List<T>? elements,
+//     Key? key,
+//     Axis scrollDirection = Axis.vertical,
+//     ScrollController? controller,
+//     bool? primary,
+//     ScrollPhysics? physics,
+//     bool shrinkWrap = false,
+//     EdgeInsetsGeometry? padding,
+//     bool addAutomaticKeepAlives = true,
+//     bool addRepaintBoundaries = true,
+//     bool addSemanticIndexes = true,
+//     double? cacheExtent,
+//   }) : super.builder(
+//     key: key,
+//     scrollDirection: scrollDirection,
+//     controller: controller,
+//     primary: primary,
+//     physics: physics,
+//     shrinkWrap: shrinkWrap,
+//     padding: padding,
+//     itemCount: elements!.length * 2,
+//     addAutomaticKeepAlives: addAutomaticKeepAlives,
+//     addRepaintBoundaries: addRepaintBoundaries,
+//     addSemanticIndexes: addSemanticIndexes,
+//     cacheExtent: cacheExtent,
+//     itemBuilder: (context, index) {
+//       int actualIndex = index ~/ 2;
+//       if (index.isEven) {
+//         E curr = groupBy(elements![actualIndex]);
+//         E prev = (actualIndex - 1 < 0
+//             ? null
+//             : groupBy(elements[actualIndex - 1])) as E;
+//
+//         if (prev != curr) {
+//           return groupSeparatorBuilder(curr);
+//         }
+//         return Container();
+//       }
+//       return itemBuilder(context, elements![actualIndex]);
+//     },
+//   ) {
+//     if (sort && elements.isNotEmpty) {
+//       if (groupBy(elements[0]) is Comparable) {
+//         elements.sort((e1, e2) =>
+//             (groupBy(e1) as Comparable).compareTo(groupBy(e2) as Comparable));
+//       } else {
+//         elements
+//             .sort((e1, e2) => ('${groupBy(e1)}').compareTo('${groupBy(e2)}'));
+//       }
+//       if (order == GroupedListOrder.DESC) {
+//         elements = elements.reversed.toList();
+//       }
+//     }
+//   }
+// }
+//
+// enum GroupedListOrder { ASC, DESC }
 
 
