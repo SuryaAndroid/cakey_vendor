@@ -140,7 +140,7 @@ class _CakeDetailsState extends State<CakeDetails>{
           currentVendorStreet = myVendorList[0]["Address"]['Street'].toString();
           currentVendorState = myVendorList[0]["Address"]['State'].toString();
           currentVendorPin= myVendorList[0]["Address"]['Pincode'].toString();
-          profileUrl = myVendorList[0]['ProfileImage'];
+          // profileUrl = myVendorList[0]['ProfileImage'];
 
 
         });
@@ -222,6 +222,9 @@ class _CakeDetailsState extends State<CakeDetails>{
       images = pref.getStringList('cakeImages')??[];
       weights = pref.getStringList('cakeWeight')??[];
       weights = weights.toSet().toList();
+
+    profileUrl = pref.getString("profileImage")??'';
+
 
     });
   }
